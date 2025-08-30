@@ -10,6 +10,7 @@ var flowerData = [
     name: "Tulip",
     growthTime: 25,
     image: "icons/tulip.png"
+    sprite1:""
   },
   {
     name: "Sunflower",
