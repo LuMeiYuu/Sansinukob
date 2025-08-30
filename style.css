@@ -32,7 +32,7 @@ html {
 }
 
 .titlescreen {
-    background-image: url(bg.png);
+    background-image: url(/elements/bg1.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
@@ -174,7 +174,7 @@ hr{
 
     background:
         linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-        url(bg.png);
+        url(/elements/bg2.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
