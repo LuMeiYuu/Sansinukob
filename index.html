@@ -452,8 +452,39 @@ function getGrowthMs(flower){
 }
 
 // pick which flower to grow during each interval
-let currentFlower = flowerData[0];
 
+var currentFlower = flowerData[0];
+ document.addEventListener('change', (e) => {
+    const value = e.target.value; // santan | kalachuchi | sunflower | sampaguita | mussaenda
+
+
+    // switch for messaging / branching
+    switch (value) {
+      case 'santan':
+        currentFlower = flowerData[0];
+        result.textContent = 'You chose Santan! �';
+        break;
+      case 'kalachuchi':
+        currentFlower = flowerData[1];
+        result.textContent = 'You chose Kalachuchi! 🌼';
+        break;
+      case 'sampaguita':
+        currentFlower = flowerData[1];
+        result.textContent = 'You chose Sampaguita! 🌸';
+        break;
+      case 'mussaenda':
+        currentFlower = flowerData[3];
+        result.textContent = 'You chose Mussaenda! 🌺';
+        break;
+    
+      default:
+        result.textContent = 'Pick a flower.';
+        currentFlower = flowerData[0];
+    }
+
+    // (optional) do something with currentFlower, e.g. update an image:
+    // document.querySelector('#preview').src = currentFlower.iconState1;
+  });
 // ---------------------------------------------
 // DOM HELPERS & UTILITIES
 // ---------------------------------------------
