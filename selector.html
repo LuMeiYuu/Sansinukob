@@ -21,14 +21,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px;
+      padding: 90px;
       box-sizing: border-box;
     }
 
     .select-container h2 {
       font-family: "PanasChill", sans-serif;
       font-size: 28px;
-      color: #5c2e00;
+      color: #e27a3e;
       margin-bottom: 20px;
       text-align: center;
     }
@@ -37,42 +37,53 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, auto);
-      gap: 30px;
+      gap: 5px;
       justify-items: center;
       width: 100%;
     }
 
-    .flower-grid img {
-      width: 120px;
+    .flower-grid button {
+      background: none;
+      border: none;
+      padding: 0;
       cursor: pointer;
       transition: transform 0.2s ease;
     }
 
-    .flower-grid img:hover {
+    .flower-grid button:hover {
       transform: scale(1.1);
     }
 
-    /* Sunflower takes the right big slot */
+    .flower-grid img {
+      width: 120px;
+      display: block;
+    }
+
     .sunflower {
       grid-column: 3 / 4;
       grid-row: 1 / 3;
       align-self: center;
     }
+
+    .sunflower img {
+      width: 180px;
+    }
+
+    @font-face {
+      font-family: "PanasChill";
+      src: url("fonts/PanasChill.ttf");
+    }
   </style>
 </head>
 <body>
-
-  <!-- marco bat takot ka magcommit -->
-   <!--ih-->
-
   <div class="select-container">
     <h2>Select a Flower</h2>
     <div class="flower-grid">
-      <img src="sprites/SANTAN/san5.png" alt="Santan">
-      <img src="sprites/KALACHUCHI/kal5.png" alt="Kalachuchi">
-      <img src="sprites/SUNFLOWER/sun5.png" alt="Sunflower" class="sunflower">
-      <img src="sprites/SAMPAGUITA/sam5.png" alt="Sampaguita">
-      <img src="sprites/MUSSAENDA/mussa5.png" alt="Mussaenda">
+      <button id="santan"><img src="sprites/SANTAN/santanblack.png" alt="Santan"></button>
+      <button id="kalachuchi"><img src="sprites/KALACHUCHI/kalachuchiblack.png" alt="Kalachuchi"></button>
+      <button id="sunflower" class="sunflower"><img src="sprites/SUNFLOWER/sunblack.png" alt="Sunflower"></button>
+      <button id="sampaguita"><img src="sprites/SAMPAGUITA/sampaguitablack.png" alt="Sampaguita"></button>
+      <button id="mussaenda"><img src="sprites/MUSSAENDA/mussaendablack.png" alt="Mussaenda"></button>
     </div>
   </div>
 </body>
