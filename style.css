@@ -49,6 +49,16 @@ html {
     z-index: 1;
 }
 
+.titlescreen img {
+    width: 70%;
+       display: block;
+  margin: 0 auto;   /* centers horizontally */
+  width: 70%;       /* keep your sizing */
+  height: auto;
+}
+
+
+
 .gif {
     position: relative;
     width: 110vw;
@@ -68,14 +78,8 @@ html {
     opacity: 0.35;
 }
 
-.logo {
-    position: absolute;
-    pointer-events: none;
-    z-index: 1000; /* topmost layer */
-     top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
-}
+
+
 .image-overlay-wrapper {
     position: relative;
     width: 100%;
@@ -144,7 +148,7 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 1rem auto;
+    margin: .5rem .5rem;
     min-width: 160px;
     min-height: 40px;
     font-size: 1rem;
@@ -223,24 +227,29 @@ li img {
     
 }
 
-.counter-disp {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; 
-    min-height: 120vh;
-    background-image: url(icons/timerbg.png);
-    background-repeat: no-repeat;
-    background-position: top center;
-    max-height: 40vh;
+   .counter-disp{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  background-image:url(icons/timerbg.png);
+  background-repeat:no-repeat;
+  background-position:top center;
+  background-size:min(420px, 70vw) auto;
+
+    min-height:483px;      /* floor */
+  min-height:380px;
+  
+
+
 }
 
+
 #counter {
-    font-family: 'PanasChill';
-    margin-top: 20vh; 
-    font-size: 15vh;
-    color: #e27a3e;
-    margin-bottom: 3px;
+ font-family: 'PanasChill';
+  font-size: clamp(32px, 8vw, 72px); /* much smaller & responsive */
+  line-height: 1;
+  margin: .25rem 0 .2rem;
 }
 
 #modeLabel{

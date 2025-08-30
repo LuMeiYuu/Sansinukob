@@ -50,42 +50,14 @@
       min-height: 100vh;
       box-shadow: var(--shadow-1);
     }
-    .counter-disp{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      min-height: 68vh;
-      background-image: url("icons/timerbg.png");
-      background-repeat:no-repeat;
-      background-position: top center;
-      background-size: contain;
-      padding-top: clamp(10vh, 15vh, 20vh);
-      gap:.25rem;
-    }
 
-    #counter{
-      font-family: "PanasChill", "Golden Age Mini", ui-serif, Georgia, serif;
-      font-size: clamp(56px, 14vw, 160px);
-      color: var(--accent);
-      margin: 0 0 .25rem;
-      text-shadow: 0 1px 0 rgba(0,0,0,.25);
-    }
-
-    #modeLabel{
-      font-family: "Golden Age Mini", "Golden Age", ui-serif, Georgia, serif;
-      font-size: clamp(14px, 3.2vw, 22px);
-      color: var(--accent);
-      letter-spacing:.06em;
-      opacity:.95;
-    }
 
     .controls{
       display:flex;
       flex-wrap:wrap;
       gap:8px;
       justify-content:center;
-      margin: var(--gap-2) auto;
+      margin: 1vh;
     }
 
     button{
@@ -376,7 +348,7 @@ position: absolute;
 
   <a id="timer"></a>
 <div class="timer">
-  <div class="menu">
+  
  
     <div class="counter-disp">
     <h1 id="counter" >25:00</h1>
@@ -384,7 +356,7 @@ position: absolute;
 
   </div>
 
-  </div>
+  
 <div class="controls">
   <button class="pomobuttons" id="start-btn">
     <img src="/elements/button.png" style="width: 100%; height: 100%;">
@@ -420,7 +392,9 @@ position: absolute;
 
 
     <div class="controls">
-      <input style="margin-top: 30px; font-size: 1rem; height: .7rem;"  type="button"  class="placeholder" id="set-btn" value="Apply Settings">
+      <input style="margin-top: 50px; height: 15px;font-family:'PanasChill' ;color: var(--accent);font-size: 15px;align-items: center;
+      white-space: pre-wrap;
+      min-height: 30px;"  type="button"   id="set-btn" value="Apply Settings">
     </div>
       <div class="settings" id="timeSet">Please enter your desired settings above.</div>
 
