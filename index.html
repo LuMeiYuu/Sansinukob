@@ -39,18 +39,7 @@
   color: #2b2b2b;
   padding: 8px 10px 10px;
 }
-    
-      .timer {
-      background:
-        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
-        url("/elements/bg2.png");
-      background-size:cover;
-      background-position: top center;
-      padding: 2rem 4vw 4rem;
-      min-height: 100vh;
-      box-shadow: var(--shadow-1);
-    }
-
+  
 
     .controls{
       display:flex;
@@ -167,8 +156,8 @@
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
   .option {
-    position: relative; border-radius: 14px; overflow: hidden; cursor: pointer;
-    background: #fff; box-shadow: 0 6px 18px rgba(2,6,23,.08);
+    position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; border: solid; border-width: 3px; border-color: #441209;
+    background: #d2b17c; box-shadow: 0 6px 18px rgba(2,6,23,.08); 
     transition: transform .12s ease, box-shadow .12s ease;
     display: block;
   }
@@ -181,11 +170,13 @@
   .option:hover .thumb img { transform: scale(1.04); }
 
   .caption {
-position: absolute;
-  left: 10px; bottom: 60px;
-  font: 600 13px/1.1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  position: absolute;
+  left: 10px; bottom: 10px; right: 10px;
+  font: 500 12px/1.1;
+  font-family: "PanasChill";
   color: #fff; background: rgba(0,0,0,.45);
-  padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(4px);
+  padding: 10px 10px; border-radius: 10px; backdrop-filter: blur(5px);
+  text-align:center;
   }
   .check {
     position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
@@ -455,7 +446,6 @@ position: absolute;
       <div class="desc"></div>
     </label>
   </div>
-
 </body>
 
 
@@ -770,6 +760,8 @@ updateCounter();
 refreshGrowthFlower(0);
 resetFlower();
 applyAllThumbs();
+
+
 </script>
 
 </body>
