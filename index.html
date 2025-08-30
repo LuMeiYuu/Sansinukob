@@ -11,9 +11,9 @@
   :root{
       /* Palette */
       --ink-1:#0b1220;
-      --ink-2:#0f1727;
+      --ink-2:#ffd789;
       --ink-3:#121a2a;
-      --ink-4:#263042;
+      --ink-4:#3f0f08;
 
       --sun-1:#ecac22;
       --sun-2:#f0bc40;
@@ -25,7 +25,7 @@
 
       /* Radii & spacing */
       --r-1:8px;
-      --r-2:12px;
+      --r-2:4px;
       --gap-1:.5rem;
       --gap-2:1rem;
       --gap-3:2rem;
@@ -83,23 +83,25 @@
     }
 
     button{
-      padding:.7rem 1.1rem;
-      border:1px solid var(--ink-4);
-      background: var(--ink-3);
-      color: var(--text-on-dark);
-      border-radius: var(--r-2);
-      cursor:pointer;
-      font-weight:600;
-      transition: transform .06s ease, background .15s ease;
+      background: none;       /* remove background */
+      border: none;           /* remove border */
+      padding: 0;             /* remove extra spacing */
+      cursor: pointer;
+      transition: opacity 0.2s ease;
     }
-    button:hover{ background:#16223a; }
-    button:active{ transform: translateY(1px); }
+    button:hover img {
+      opacity: 0.8;  /* slightly dim on hover */
+    }
+    button:active img {
+      opacity: 0.5;  /* translucent when clicked */
+    }
 
     .grid{
       display:grid;
       grid-template-columns: repeat(4, minmax(140px,1fr));
       gap:8px;
       max-width: min(960px, 96vw);
+      height: 40px;
       margin: 0 auto;
     }
 
@@ -109,8 +111,8 @@
       border-radius: var(--r-2);
       border:1px solid var(--ink-4);
       background: var(--ink-2);
-      color: var(--text-on-dark);
       outline:none;
+      
     }
 
     .settings{
@@ -121,27 +123,45 @@
       border:1px solid var(--ink-4);
       max-width: min(960px, 96vw);
       margin: .5rem auto 0;
-      color: var(--text-on-dark);
+      color: white;
       opacity:.9;
     }
     .growth-wrap{
       margin-top:1rem; display:grid; place-items:center; gap:.35rem;
    }
+
+    .placeholder{
+      color: var(--accent);
+      font-family: "PanasChill";
+      font-size: 20px;
+      align-items: center;
+      white-space: pre-wrap;
+      min-height: 100px;
+    }
+
+      .placeholder::placeholder{
+        color: var(--accent);
+        font-family: "PanasChill";
+        font-size: .9rem;
+        margin: 1rem;
+        white-space: pre-wrap;
+        margin: auto;
+        margin-top: 1px;
+    }
+    
+    
+  
 </style>
   
 </head>
 <body>
 
 <div class="titlescreen">
-  <div class="logo">
-    <img src="icons/logo.png" alt="Logo">
-    <div class="gif"> <img src="elements/gif.gif" alt="GIF"></div>  
-  </div>
+  <div class="gif"></div>
+<div id="logo">
+  <img src="icons/logo.png" alt="Logo">
 </div>
-
-
-  <div class="container">
-
+    <div class="container">
   <a class="btn" href="#timer">
     <img src="icons/start.png" alt="Start Button">
   </a>
@@ -149,6 +169,8 @@
     <img src="icons/about.png" alt="About Button">
   </a>
   </div>
+</div>
+
 
   </div>
 
@@ -199,16 +221,22 @@
 
   </div>
     <div class="controls">
-      <button id="start-btn">Start</button>
-      <button id="pause-btn">Pause</button>
-      <button id="reset-btn">Reset</button>
+      <button id="start-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <img src="/elements/start.png" style="width: 100%; height: 100%;">
+      </button>
+      <button id="pause-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <img id="pause-icon" src="/elements/pause.png" style="width: 100%; height: 100%;">
+      </button>
+      <button id="reset-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <img src="/elements/reset.png" style="width: 100%; height: 100%;">
+      </button>
     </div>
 
   <div class="grid">
-      <input type="number" id="worktime" min="0" placeholder="Work (min) eg. 25" />
-      <input type="number" id="sBreak"  min="0" placeholder="Short break (min) eg. 5" />
-      <input type="number" id="lBreak"  min="0" placeholder="Long break (min) eg. 15" />
-      <input type="number" id="bMaxCounter" min="1" placeholder="Shorts before long eg. 4" />
+      <input type="number" class="placeholder" id="worktime" min="0" placeholder="How long do want to work?" />
+      <input type="number" class="placeholder" id="sBreak"  min="0" placeholder="Short breaks for how long?" />
+      <input type="number" class="placeholder" id="lBreak"  min="0" placeholder="Long breaks for how long?" />
+      <input type="number" class="placeholder" id="bMaxCounter" min="1" placeholder="How many short break do you want to have before getting a long break?" />
     </div>
 
      <div class="growth-wrap">
