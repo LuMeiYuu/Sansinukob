@@ -2,19 +2,58 @@
 
 var flowerData = [
   {
-    name: "Rose",
-    growthTime: 30,
-    image: "icons/rose.png"
+    name: "Santan",
+    growthTime: "7500",
+    lockedDesc: "Where purity lingers in the air.",
+    fullDesc: "Flame of the Woods - ahh yes, this is what Filipino children used to sip for that one drop of sweetness—pure playground treasure.",
+    iconState1: "sprites/SANTAN/san1.png",
+    iconState2: "sprites/SANTAN/san2.png",
+    iconState3: "sprites/SANTAN/san3.png",
+    iconState4: "sprites/SANTAN/san4.png",
+    iconState5: "sprites/SANTAN/san5.png",
   },
   {
-    name: "Tulip",
-    growthTime: 25,
-    image: "icons/tulip.png"
-    sprite1:""
+    name: "Kalachuchi",
+    growthTime: "12000",
+    lockedDesc: "Where colors dare to speak louder than words.",
+    fullDesc: "Frangipani - in places of farewell, it blossoms, it blooms, it shouts athe whisphers of memories and the last farewells.",
+    iconState1: "sprites/KALACHUCHI/kal1.png",
+    iconState2: "sprites/KALACHUCHI/kal2.png",
+    iconState3: "sprites/KALACHUCHI/kal3.png",
+    iconState4: "sprites/KALACHUCHI/kal4.png",
+    iconState5: "sprites/KALACHUCHI/kal5.png",
   },
   {
-    name: "Sunflower",
-    growthTime: 35,
-    image: "icons/sunflower.png"
-  }
+    name: "Sampaguita",
+    growthTime: "15000",
+    lockedDesc: "Where childhood secrets taste sweet.",
+    fullDesc: "Arabian Jasmine - you can never go wrong with Philippines' national flower. Strung into garlands, sold outside churches and jeepney stops, always carrying that distinct scent.",
+    iconState1: "sprites/SAMAPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+  },
+  {
+    name: "Kahoy-Dalaga",
+    growthTime: "30000",
+    lockedDesc: "Where fallen petals still smile.",
+    fullDesc: "Mussaenda Philippica - blooms like a constellation brought down to earth, each petal a luminous star resting on emerald skies.",
+    iconState1: "sprites/MUSSAENDA/mussa1.png",
+    iconState2: "sprites/MUSSAENDA/mussa2.png",
+    iconState3: "sprites/MUSSAENDA/mussa3.png",
+    iconState4: "sprites/MUSSAENDA/mussa4.png",
+    iconState5: "sprites/MUSSAENDA/mussa5.png",
+  },
+  {
+    name: "Mirasol",
+    growthTime: "45000",
+    lockedDesc: "Where tiny sunshines are met.",
+    fullDesc: "Sunflower - a poetic symbolism of Filipinos' perceverance, standing tall always turning its face where the light shines.",
+    iconState1: "sprites/SAMPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+  },
 ];
