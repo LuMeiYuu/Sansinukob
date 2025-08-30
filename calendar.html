@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2025 Calendar</title>
+  <style>
+    @font-face {
+      font-family: "PanasChill";
+      src: url("fonts/PanasChill.ttf");
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f4f4f4;
+      gap: 40px;
+      padding: 40px;
+    }
+
+    .calendar {
+      position: relative;
+      width: 700px;
+      height: 500px;
+      background: url("elements/calen2.png") no-repeat center/cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+
+    .header {
+      font-size: 36px;
+      font-weight: 500;
+      margin-top: 75px;
+      margin-bottom: 10px;
+      font-family: "PanasChill";
+      text-align: center;
+      color: #a0522d;
+    }
+
+    .insidecal {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: 42px;
+      gap: 0px 18px;
+      justify-items: center;
+    }
+
+    .day {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 5px;
+      background: #fdf3e0;
+      border-style: solid;
+      border-width: 1px;
+      font-family: "PanasChill";
+      font-size: 15px;
+      font-weight: 500;
+      color: #a0522d;
+    }
+
+    .day.empty {
+      background: transparent;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- I’ll provide January–December 2025 with correct day positions -->
+
+<script>
+  const months = [
+    { name: "JANUARY", days: 31, start: 3 },   // Wed
+    { name: "FEBRUARY", days: 28, start: 6 }, // Sat
+    { name: "MARCH", days: 31, start: 6 },    // Sat
+    { name: "APRIL", days: 30, start: 2 },    // Tue
+    { name: "MAY", days: 31, start: 4 },      // Thu
+    { name: "JUNE", days: 30, start: 0 },     // Sun
+    { name: "JULY", days: 31, start: 2 },     // Tue
+    { name: "AUGUST", days: 31, start: 5 },   // Fri
+    { name: "SEPTEMBER", days: 30, start: 1 },// Mon
+    { name: "OCTOBER", days: 31, start: 3 },  // Wed
+    { name: "NOVEMBER", days: 30, start: 6 }, // Sat
+    { name: "DECEMBER", days: 31, start: 1 }  // Mon
+  ];
+
+  const container = document.body;
+
+  months.forEach((m, mi) => {
+    const cal = document.createElement("div");
+    cal.className = "calendar";
+
+    const header = document.createElement("div");
+    header.className = "header";
+    header.textContent = m.name;
+    cal.appendChild(header);
+
+    const grid = document.createElement("div");
+    grid.className = "insidecal";
+
+    for (let i = 0; i < m.start; i++) {
+      const empty = document.createElement("div");
+      empty.className = "day empty";
+      grid.appendChild(empty);
+    }
+
+    for (let d = 1; d <= m.days; d++) {
+      const day = document.createElement("div");
+      day.className = "day";
+      day.id = `${m.name.toLowerCase().slice(0,3)}${d}`;
+      day.textContent = d;
+      grid.appendChild(day);
+    }
+
+    cal.appendChild(grid);
+    container.appendChild(cal);
+  });
+</script>
+
+</body>
+</html>
