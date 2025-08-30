@@ -6,15 +6,136 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="icons/pegaraw.jpg">
   <title>Sansinukob</title>
+<style>
+
+  :root{
+      /* Palette */
+      --ink-1:#0b1220;
+      --ink-2:#0f1727;
+      --ink-3:#121a2a;
+      --ink-4:#263042;
+
+      --sun-1:#ecac22;
+      --sun-2:#f0bc40;
+      --sun-3:#fae792;
+
+      --accent:#e27a3e;
+      --text-on-dark:#e6edf3;
+      --text-on-sun:#0a0a23;
+
+      /* Radii & spacing */
+      --r-1:8px;
+      --r-2:12px;
+      --gap-1:.5rem;
+      --gap-2:1rem;
+      --gap-3:2rem;
+
+      /* Shadows */
+      --shadow-1:0 2px 4px rgba(0,0,0,.2);
+    }
+    
+      .timer {
+      background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+        url("/elements/bg2.png");
+      background-size:cover;
+      background-position: top center;
+      padding: 2rem 4vw 4rem;
+      min-height: 100vh;
+      box-shadow: var(--shadow-1);
+    }
+    .counter-disp{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      min-height: 68vh;
+      background-image: url("icons/timerbg.png");
+      background-repeat:no-repeat;
+      background-position: top center;
+      background-size: contain;
+      padding-top: clamp(10vh, 15vh, 20vh);
+      gap:.25rem;
+    }
+
+    #counter{
+      font-family: "PanasChill", "Golden Age Mini", ui-serif, Georgia, serif;
+      font-size: clamp(56px, 14vw, 160px);
+      color: var(--accent);
+      margin: 0 0 .25rem;
+      text-shadow: 0 1px 0 rgba(0,0,0,.25);
+    }
+
+    #modeLabel{
+      font-family: "Golden Age Mini", "Golden Age", ui-serif, Georgia, serif;
+      font-size: clamp(14px, 3.2vw, 22px);
+      color: var(--accent);
+      letter-spacing:.06em;
+      opacity:.95;
+    }
+
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:center;
+      margin: var(--gap-2) auto;
+    }
+
+    button{
+      padding:.7rem 1.1rem;
+      border:1px solid var(--ink-4);
+      background: var(--ink-3);
+      color: var(--text-on-dark);
+      border-radius: var(--r-2);
+      cursor:pointer;
+      font-weight:600;
+      transition: transform .06s ease, background .15s ease;
+    }
+    button:hover{ background:#16223a; }
+    button:active{ transform: translateY(1px); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(140px,1fr));
+      gap:8px;
+      max-width: min(960px, 96vw);
+      margin: 0 auto;
+    }
+
+    .grid input{
+      width:100%;
+      padding:.6rem .8rem;
+      border-radius: var(--r-2);
+      border:1px solid var(--ink-4);
+      background: var(--ink-2);
+      color: var(--text-on-dark);
+      outline:none;
+    }
+
+    .settings{
+      white-space:pre-line;
+      background: var(--ink-2);
+      padding:.8rem 1rem;
+      border-radius: var(--r-2);
+      border:1px solid var(--ink-4);
+      max-width: min(960px, 96vw);
+      margin: .5rem auto 0;
+      color: var(--text-on-dark);
+      opacity:.9;
+    }
+</style>
+  
 </head>
 <body>
 
-
-  <div class="titlescreen">
-
+<div class="titlescreen">
   <div class="logo">
     <img src="icons/logo.png" alt="Logo">
+    <div class="gif"></div>  
   </div>
+</div>
+
 
   <div class="container">
 
@@ -63,183 +184,178 @@
 
   <a id="timer"></a>
 <div class="timer">
-  <ul class="menu">
-    <li><a id="menu"><img src="icons/menu.png" alt="menu Button"></a></li>
-    <li><a id="play"><img src="icons/play.png" alt="play Button"></a></li>
-    <li><a id="pause"><img src="icons/pause.png" alt="pause Button"></a></li>
-  </ul>
+  <div class="menu">
+ 
 
   
-    <div class="counter">
-    <h1 id="timer-display" >25:00</h1>
-    <h3 id="flowerdisplay"> UNDER DEVELOPMENT </h3>
+    <div class="counter-disp">
+    <h1 id="counter" >25:00</h1>
+    <h3 class="mode" id="modeLabel"> UNDER DEVELOPMENT </h3>
 
   </div>
+
   </div>
+    <div class="controls">
+      <button id="start-btn">Start</button>
+      <button id="pause-btn">Pause</button>
+      <button id="reset-btn">Reset</button>
+    </div>
+
+  <div class="grid">
+      <input type="number" id="worktime" min="0" placeholder="Work (min) eg. 25" />
+      <input type="number" id="sBreak"  min="0" placeholder="Short break (min) eg. 5" />
+      <input type="number" id="lBreak"  min="0" placeholder="Long break (min) eg. 15" />
+      <input type="number" id="bMaxCounter" min="1" placeholder="Shorts before long eg. 4" />
+    </div>
+
+       <div class="controls">
+      <button id="set-btn">Apply Settings</button>
+    </div>
+      <div class="settings" id="timeSet">—</div>
+  
 
 </body>
 
 <script>
-// --- state ---
-// --- state ---
-var totalSeconds = 3600;
-var timer = null;
-var isPaused = false;
+ let timer = null;
+    let isPaused = true;
 
-// flags
-var timeFinished = false;
-var work = true;
-var sBreak = false;
-var lBreak = false;
+    // durations (seconds)
+    let workSeconds   = 25 * 60;
+    let shortSeconds  = 5 * 60;
+    let longSeconds   = 15 * 60;
 
-const setBtn = document.getElementById("set-btn");
+    // how many short breaks between long ones
+    let maxShortsBeforeLong = 4; // after 4 work sessions, take a long break
 
-// inputs (minutes)
-let worktime = 0;     // minutes (from UI)
-let sBreaktime = 0;   // minutes (from UI)
-let lBreaktime = 0;   // minutes (from UI)
-let bMaxCounter = 0;  // counter (from UI)
+    // runtime counters
+    let totalSeconds = workSeconds;
+    let shortBreaksTaken = 0; // increments after finishing a short break cycle
 
-// internal (seconds)
-let workSeconds = 0;
-let sBreakSeconds = 0;
-let lBreakSeconds = 0;
+    // current mode: 'work' | 'short' | 'long'
+    let mode = 'work';
 
-let breakCounter = 0; // how many short breaks taken
-let work = true;
-let sBreak = false;
-let lBreak = false;
-let timeDone = false;
+    // ---------------- Helpers ----------------
+    const $ = (id) => document.getElementById(id);
 
-if(work = true, sBreak = false, lBreak = false, breakCounter > bMaxCounter){
-  totalSeconds = workSeconds;
-  work = false; sBreak = true;
-  
-} else if (work = false, sBreak = true, lBreak = false){
-  totalSeconds = sBreakSeconds;
-} else if (work = false, sBreak = false, lBreak = true){
-  totalSeconds = lBreakSeconds;
-}
+    function minutesToSeconds(m) { return Math.max(0, Math.floor(Number(m || 0) * 60)); }
 
+    function formatTime(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      const mm = String(Math.floor(s / 60)).padStart(2, '0');
+      const ss = String(s % 60).padStart(2, '0');
+      return `${mm}:${ss}`;
+    }
 
-// --- helpers (minutes <-> seconds) ---
-function minutesToSeconds(minutes) {
-  return Math.max(0, Math.floor(minutes * 60));
-}
+    function updateCounter() { $('counter').innerText = formatTime(totalSeconds); }
+    function updateModeLabel() { $('modeLabel').innerText = `Mode: ${mode[0].toUpperCase()}${mode.slice(1)}`; }
 
-function secondsToMinutes(seconds) {
-  return Math.max(0, Math.floor(seconds / 60));
-}
-
-// --- set time settings ---
-setBtn.onclick = function () {
-  // Read numeric values from number inputs
-  const w  = document.getElementById("worktime").valueAsNumber;
-  const sb = document.getElementById("sBreak").valueAsNumber;
-  const lb = document.getElementById("lBreak").valueAsNumber;
-  const bc = document.getElementById("bMaxCounter").valueAsNumber;
-
-  // Fallback if any are empty
-  worktime    = Number.isFinite(w)  ? w  : 0;
-  sBreaktime  = Number.isFinite(sb) ? sb : 0;
-  lBreaktime  = Number.isFinite(lb) ? lb : 0;
-  bMaxCounter = Number.isFinite(bc) ? bc : 0;
-
-  // Convert minutes (UI) -> seconds (internal)
-  workSeconds   = minutesToSeconds(worktime);
-  sBreakSeconds = minutesToSeconds(sBreaktime);
-  lBreakSeconds = minutesToSeconds(lBreaktime);
-
-  
-
-  // Show minutes back to the user (as entered)
-  document.getElementById("timeSet").innerText =
-`Work Time: ${worktime} min
-Short Break: ${sBreaktime} min
-Long Break: ${lBreaktime} min
-Break Max Counter: ${bMaxCounter}`;
-
-
-  // Debug for console, show internal seconds
-  console.log({ workSeconds, sBreakSeconds, lBreakSeconds, bMaxCounter, totalSeconds });
-};
-
-
-
-//S O S, jscript is so ass, tulong auq n
-
-
-
-  //format ms to minute second
-  function formatTime(sec) {
-    let minutes = Math.floor((sec % 3600) / 60);
-    let seconds = sec % 60;
-    return (
-      String(minutes).padStart(2, '0') + ":" +
-      String(seconds).padStart(2, '0')
-    );
-  }
-
-  //counter updater for pause and resume
-  function updateCounter() {
-    document.getElementById("counter").innerText = formatTime(totalSeconds);
-  }
-
-function startCountdown() {
-  // If there is already a timer running, stop it
-  if (timer !== null && timer !== undefined) {
-    clearInterval(timer);
-  }
-
-  // Make sure countdown is active, not paused
-  isPaused = false;
-
-  // Update the display before starting
-  updateCounter();
-
-  // Start a new timer that ticks every 1 second
-  timer = setInterval(function() {
-    // Only continue if the countdown is not paused
-    if (isPaused === false) {
-      // Subtract one second
-      totalSeconds = totalSeconds - 1;
-
-      // Update the display
+    function setMode(nextMode, setFreshTime = true) {
+      mode = nextMode;
+      updateModeLabel();
+      if (setFreshTime) {
+        if (mode === 'work') totalSeconds = workSeconds;
+        if (mode === 'short') totalSeconds = shortSeconds;
+        if (mode === 'long') totalSeconds = longSeconds;
+      }
       updateCounter();
+    }
 
-      // If the countdown has reached zero or gone below zero
+    function clearTick() {
+      if (timer != null) { clearInterval(timer); timer = null; }
+    }
+
+    function tick() {
+      if (isPaused) return;
+      totalSeconds -= 1;
+      updateCounter();
       if (totalSeconds <= 0) {
-        // stop the timer
-        clearInterval(timer);
-
-        // Notify the user
-        ;
+        clearTick();
+        onIntervalFinished();
       }
     }
-  }, 1000);
-}
 
+    function startCountdown() {
+      // if durations are zero, avoid infinite loops
+      const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
+      if (durationForMode <= 0) {
+        alert('Please set durations greater than 0 minutes.');
+        return;
+      }
 
+      // If no remaining time (e.g., after a reset), reload the current mode duration
+      if (totalSeconds <= 0) setMode(mode, true);
 
-  document.getElementById("start-btn").onclick = function() {
-    totalSeconds = workSeconds; 
-    startCountdown();
-  };
+      isPaused = false;
+      clearTick();
+      updateCounter();
+      timer = setInterval(tick, 1000);
+    }
 
-  document.getElementById("pause-btn").onclick = function() {
-    isPaused = !isPaused;
-    this.innerText = isPaused ? "Resume" : "Pause";
-  };
+    function pauseResume() {
+      isPaused = !isPaused;
+      $('pause-btn').innerText = isPaused ? 'Resume' : 'Pause';
+      if (!isPaused && timer == null) {
+        timer = setInterval(tick, 1000);
+      }
+    }
 
-  window.onload = function() {
+    function resetTimer() {
+      clearTick();
+      isPaused = true;
+      $('pause-btn').innerText = 'Pause';
+      setMode('work', true);
+      shortBreaksTaken = 0;
+    }
+
+    function onIntervalFinished() {
+      // when an interval hits 0, choose the next mode and auto-start it
+      if (mode === 'work') {
+        // After finishing WORK: decide short vs long break
+        if ((shortBreaksTaken + 1) >= maxShortsBeforeLong) {
+          setMode('long', true);
+          shortBreaksTaken = 0; // reset the cycle when taking a long break
+        } else {
+          setMode('short', true);
+          shortBreaksTaken += 1; // we are about to take a short break in this cycle
+        }
+      } else if (mode === 'short') {
+        setMode('work', true);
+      } else if (mode === 'long') {
+        setMode('work', true);
+      }
+      // auto-continue
+      startCountdown();
+    }
+
+    // ---------------- Settings ----------------
+    $('set-btn').onclick = function () {
+      const w  = $('worktime').valueAsNumber;
+      const sb = $('sBreak').valueAsNumber;
+      const lb = $('lBreak').valueAsNumber;
+      const bc = $('bMaxCounter').valueAsNumber;
+
+      workSeconds  = minutesToSeconds(Number.isFinite(w)  ? w  : 25);
+      shortSeconds = minutesToSeconds(Number.isFinite(sb) ? sb : 5);
+      longSeconds  = minutesToSeconds(Number.isFinite(lb) ? lb : 15);
+      maxShortsBeforeLong = Math.max(1, Math.floor(Number.isFinite(bc) ? bc : 4));
+
+      // keep current mode but refresh remaining time to match new settings
+      setMode(mode, true);
+
+      $('timeSet').innerText =
+`Work Time: ${Math.floor(workSeconds/60)} min\nShort Break: ${Math.floor(shortSeconds/60)} min\nLong Break: ${Math.floor(longSeconds/60)} min\nShorts before Long: ${maxShortsBeforeLong}`;
+    };
+
+    // event callers
+    $('start-btn').onclick = startCountdown;
+    $('pause-btn').onclick = pauseResume;
+    $('reset-btn').onclick = resetTimer;
+
+    // initial call for statuses
+    updateModeLabel();
     updateCounter();
-  };
 
-
-
-
-
-  
 </script>
 
 </html>
