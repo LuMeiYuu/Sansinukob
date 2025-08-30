@@ -33,6 +33,12 @@
       /* Shadows */
       --shadow-1:0 2px 4px rgba(0,0,0,.2);
     }
+
+    .desc{
+  font: 500 12px/1.35 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #2b2b2b;
+  padding: 8px 10px 10px;
+}
     
       .timer {
       background:
@@ -154,8 +160,8 @@
     }
 
     .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
-    #growthFlower { height: 20vh; margin-left: auto; }
-    progress { width: 320px; height: 16px; }
+    #growthFlower { height: 20vh; margin-left: auto; margin-right: auto;}
+    progress { width: 320px; height: 30px; }
    
     .pomobuttons{
       height: 70px;
@@ -183,9 +189,6 @@
       pointer-events: none;
 }
 
-    .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
-    #growthFlower { height: 20vh; margin-left: auto; }
-    progress { width: 320px; height: 16px; }
 
      .flower-grid {
     display: grid; gap: 14px;
@@ -201,15 +204,16 @@
   .option input {
     position: absolute; inset: 0; opacity: 0; pointer-events: none;
   }
-  .thumb { aspect-ratio: 1 / 1; overflow: hidden; }
+  .thumb { position: relative;aspect-ratio: 1 / 1; overflow: hidden; }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .2s ease; }
   .option:hover .thumb img { transform: scale(1.04); }
 
   .caption {
-    position: absolute; left: 10px; bottom: 10px;
-    font: 600 13px/1.1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    color: #fff; background: rgba(0,0,0,.45);
-    padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(4px);
+position: absolute;
+  left: 10px; bottom: 60px;
+  font: 600 13px/1.1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #fff; background: rgba(0,0,0,.45);
+  padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(4px);
   }
   .check {
     position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
@@ -224,10 +228,94 @@
   .option input:focus-visible + .thumb { outline: 3px solid var(--accent); outline-offset: -3px; }
   .option input:checked ~ .check { opacity: 1; transform: scale(1); }
 
-    
+    #flowerEta {
+        font-family: "Golden Age Mini", "Golden Age", ui-serif, Georgia, serif;
+      font-size: clamp(14px, 3.2vw, 22px);
+      color: var(--accent);
+      letter-spacing:.06em;
+      opacity:.95;
+      margin: 2rem;
+    }
+
+.desc{
+  font: 500 12px/1.35 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #2b2b2b;
+  padding: 8px 10px 10px;
+}
     
   
 </style>
+<script>
+    const flowerData = [
+    {
+    name: "Santan",
+    growthTime: 12000,
+    lockedDesc: "Where purity lingers in the air.",
+    fullDesc: "Flame of the Woods - ahh yes, this is what Filipino children used to sip for that one drop of sweetness—pure playground treasure.",
+    iconState1: "sprites/SANTAN/san1.png",
+    iconState2: "sprites/SANTAN/san2.png",
+    iconState3: "sprites/SANTAN/san3.png",
+    iconState4: "sprites/SANTAN/san4.png",
+    iconState5: "sprites/SANTAN/san5.png",
+      thumbLocked: "sprites/SANTAN/santanblack.png",
+    thumbGrown:  "sprites/SANTAN/san5.png",
+  },
+  {
+    name: "Kalachuchi",
+    growthTime: 12000,
+    lockedDesc: "Where colors dare to speak louder than words.",
+    fullDesc: "Frangipani - in places of farewell, it blossoms, it blooms, it shouts athe whisphers of memories and the last farewells.",
+    iconState1: "sprites/KALACHUCHI/kal1.png",
+    iconState2: "sprites/KALACHUCHI/kal2.png",
+    iconState3: "sprites/KALACHUCHI/kal3.png",
+    iconState4: "sprites/KALACHUCHI/kal4.png",
+    iconState5: "sprites/KALACHUCHI/kal5.png",
+        thumbLocked: "sprites/KALACHUCHI/kalachuchiblack.png",
+    thumbGrown:  "sprites/KALACHUCHI/kal5.png",
+  },
+  {
+    name: "Sampaguita",
+    growthTime: 12000,
+    lockedDesc: "Where childhood secrets taste sweet.",
+    fullDesc: "Arabian Jasmine - you can never go wrong with Philippines' national flower. Strung into garlands, sold outside churches and jeepney stops, always carrying that distinct scent.",
+    iconState1: "sprites/SAMPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+    thumbLocked: "sprites/SAMPAGUITA/sampaguitablack.png",
+    thumbGrown:  "sprites/SAMPAGUITA/sam5.png",
+  },
+  {
+    name: "Kahoy-Dalaga",
+    growthTime: 12000,
+    lockedDesc: "Where fallen petals still smile.",
+    fullDesc: "Mussaenda Philippica - blooms like a constellation brought down to earth, each petal a luminous star resting on emerald skies.",
+    iconState1: "sprites/MUSSAENDA/mussa1.png",
+    iconState2: "sprites/MUSSAENDA/mussa2.png",
+    iconState3: "sprites/MUSSAENDA/mussa3.png",
+    iconState4: "sprites/MUSSAENDA/mussa4.png",
+    iconState5: "sprites/MUSSAENDA/mussa5.png",
+        thumbLocked: "sprites/MUSSAENDA/mussaendablack.png",
+    thumbGrown:  "sprites/MUSSAENDA/mussa5.png",
+  },
+  {
+    name: "Mirasol",
+    growthTime: 12000,
+    lockedDesc: "Where tiny sunshines are met.",
+    fullDesc: "Sunflower - a poetic symbolism of Filipinos' perceverance, standing tall always turning its face where the light shines.",
+    iconState1: "sprites/SUNFLOWER/sun1.png",
+    iconState2: "sprites/SUNFLOWER/sun2.png",
+    iconState3: "sprites/SUNFLOWER/sun3.png",
+    iconState4: "sprites/SUNFLOWER/sun4.png",
+    iconState5: "sprites/SUNFLOWER/sun5.png",
+    thumbLocked: "sprites/SUNFLOWER/sunblack.png",
+    thumbGrown:  "sprites/SUNFLOWER/sun5.png"
+  },
+];
+
+
+</script>
   
 </head>
 <body>
@@ -331,8 +419,8 @@
 
 
 
-       <div class="controls">
-      <button  class="placeholder"id="set-btn">Apply Settings</button>
+    <div class="controls">
+      <input style="margin-top: 30px; font-size: 1rem; height: .7rem;"  type="button"  class="placeholder" id="set-btn" value="Apply Settings">
     </div>
       
     <!-- <div class="settings" id="timeSet">Please enter your desired settings above.</div> -->
@@ -349,8 +437,9 @@
       <figure class="thumb">
         <img src="sprites/SANTAN/santanblack.png" alt="Santan" />
       </figure>
-      <span class="caption">Santan</span>
+      <span class="caption">Where purity lingers in the air.</span>
       <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
     </label>
 
     <label class="option">
@@ -358,8 +447,9 @@
       <figure class="thumb">
         <img src="sprites/KALACHUCHI/kalachuchiblack.png" alt="Kalachuchi" />
       </figure>
-      <span class="caption">Kalachuchi</span>
+      <span class="caption">Where colors dare to speak louder than words.</span>
       <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
     </label>
 
     <label class="option">
@@ -367,8 +457,9 @@
       <figure class="thumb">
         <img src="sprites/SUNFLOWER/sunblack.png" alt="Sunflower" />
       </figure>
-      <span class="caption">Sunflower</span>
+      <span class="caption">Where tiny sunshines are met.</span>
       <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
     </label>
 
     <label class="option">
@@ -376,8 +467,9 @@
       <figure class="thumb">
         <img src="sprites/SAMPAGUITA/sampaguitablack.png" alt="Sampaguita" />
       </figure>
-      <span class="caption">Sampaguita</span>
+      <span class="caption">Where childhood secrets taste sweet.</span>
       <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
     </label>
 
     <label class="option">
@@ -385,110 +477,70 @@
       <figure class="thumb">
         <img src="sprites/MUSSAENDA/mussaendablack.png" alt="Mussaenda" />
       </figure>
-      <span class="caption">Mussaenda</span>
+      <span class="caption">Where fallen petals still smile.</span>
       <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
     </label>
   </div>
 
 </body>
 
+
+
 <script>
-  const flowerData = [
-    {
-    name: "Santan",
-    growthTime: "750",
-    lockedDesc: "Where purity lingers in the air.",
-    fullDesc: "Flame of the Woods - ahh yes, this is what Filipino children used to sip for that one drop of sweetness—pure playground treasure.",
-    iconState1: "sprites/SANTAN/san1.png",
-    iconState2: "sprites/SANTAN/san2.png",
-    iconState3: "sprites/SANTAN/san3.png",
-    iconState4: "sprites/SANTAN/san4.png",
-    iconState5: "sprites/SANTAN/san5.png",
-  },
-  {
-    name: "Kalachuchi",
-    growthTime: "120000",
-    lockedDesc: "Where colors dare to speak louder than words.",
-    fullDesc: "Frangipani - in places of farewell, it blossoms, it blooms, it shouts athe whisphers of memories and the last farewells.",
-    iconState1: "sprites/KALACHUCHI/kal1.png",
-    iconState2: "sprites/KALACHUCHI/kal2.png",
-    iconState3: "sprites/KALACHUCHI/kal3.png",
-    iconState4: "sprites/KALACHUCHI/kal4.png",
-    iconState5: "sprites/KALACHUCHI/kal5.png",
-  },
-  {
-    name: "Sampaguita",
-    growthTime: "15000",
-    lockedDesc: "Where childhood secrets taste sweet.",
-    fullDesc: "Arabian Jasmine - you can never go wrong with Philippines' national flower. Strung into garlands, sold outside churches and jeepney stops, always carrying that distinct scent.",
-    iconState1: "sprites/SAMPAGUITA/sam1.png",
-    iconState2: "sprites/SAMPAGUITA/sam2.png",
-    iconState3: "sprites/SAMPAGUITA/sam3.png",
-    iconState4: "sprites/SAMPAGUITA/sam4.png",
-    iconState5: "sprites/SAMPAGUITA/sam5.png",
-  },
-  {
-    name: "Kahoy-Dalaga",
-    growthTime: "30000",
-    lockedDesc: "Where fallen petals still smile.",
-    fullDesc: "Mussaenda Philippica - blooms like a constellation brought down to earth, each petal a luminous star resting on emerald skies.",
-    iconState1: "sprites/MUSSAENDA/mussa1.png",
-    iconState2: "sprites/MUSSAENDA/mussa2.png",
-    iconState3: "sprites/MUSSAENDA/mussa3.png",
-    iconState4: "sprites/MUSSAENDA/mussa4.png",
-    iconState5: "sprites/MUSSAENDA/mussa5.png",
-  },
-  {
-    name: "Mirasol",
-    growthTime: "45000",
-    lockedDesc: "Where tiny sunshines are met.",
-    fullDesc: "Sunflower - a poetic symbolism of Filipinos' perceverance, standing tall always turning its face where the light shines.",
-    iconState1: "sprites/SUNFLOWER/sun1.png",
-    iconState2: "sprites/SUNFLOWER/sun2.png",
-    iconState3: "sprites/SUNFLOWER/sun3.png",
-    iconState4: "sprites/SUNFLOWER/sun4.png",
-    iconState5: "sprites/SUNFLOWER/sun5.png",
-  },
-];
-//grabs growth in ms
+
+  const form = document.getElementById('flowerForm');
+  const result = document.getElementById('result');
+// ---------------------------------------------
+// SPRITES / FLOWERS
+// ---------------------------------------------
+
+
+//grabs 
+let currentFlower = flowerData[0];
+let currentKey = 'santan'; 
+// Only react to flower radio changes inside .flower-grid
+document.querySelector('.flower-grid').addEventListener('change', (e) => {
+  const input = e.target.closest('input[name="flower"]');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  currentKey = value; 
+  switch (value) {
+    case 'santan':
+      currentFlower = flowerData[0];
+      if (result) result.textContent = 'You chose Santan! 🌺';
+      break;
+    case 'kalachuchi':
+      currentFlower = flowerData[1];
+      if (result) result.textContent = 'You chose Kalachuchi! 🌼';
+      break;
+    case 'sampaguita':
+      currentFlower = flowerData[2];
+      if (result) result.textContent = 'You chose Sampaguita! 🌸';
+      break;
+    case 'mussaenda':
+      currentFlower = flowerData[3];
+      if (result) result.textContent = 'You chose Mussaenda! 🌺';
+      break;
+    case 'sunflower':
+      currentFlower = flowerData[4];
+      if (result) result.textContent = 'You chose Mirasol! 🌻';
+      break;
+  }
+
+  resetFlower();
+  updateFlowerUI();
+});
+
+
 function getGrowthMs(flower){
   return Math.max(1, Number(flower?.growthTime) || 0);
 }
 
 // pick which flower to grow during each interval
 
-var currentFlower = flowerData[0];
- document.addEventListener('change', (e) => {
-    const value = e.target.value; // santan | kalachuchi | sunflower | sampaguita | mussaenda
 
-
-    // switch for messaging / branching
-    switch (value) {
-      case 'santan':
-        currentFlower = flowerData[0];
-        result.textContent = 'You chose Santan! �';
-        break;
-      case 'kalachuchi':
-        currentFlower = flowerData[1];
-        result.textContent = 'You chose Kalachuchi! 🌼';
-        break;
-      case 'sampaguita':
-        currentFlower = flowerData[1];
-        result.textContent = 'You chose Sampaguita! 🌸';
-        break;
-      case 'mussaenda':
-        currentFlower = flowerData[3];
-        result.textContent = 'You chose Mussaenda! 🌺';
-        break;
-    
-      default:
-        result.textContent = 'Pick a flower.';
-        currentFlower = flowerData[0];
-    }
-
-    // (optional) do something with currentFlower, e.g. update an image:
-    // document.querySelector('#preview').src = currentFlower.iconState1;
-  });
 // ---------------------------------------------
 // DOM HELPERS & UTILITIES
 // ---------------------------------------------
@@ -500,6 +552,28 @@ const flowerEta    = $("flowerEta");
 let flowerElapsedMs = 0;
 let flowerGrowthMs = getGrowthMs(currentFlower);
 
+function markTileGrown(key, flower){
+  // find the label.option that contains this radio
+  const tile = document.getElementById(key)?.closest('.option');
+  if (!tile) return;
+
+  // 1) swap the thumb image to the final sprite
+  const img = tile.querySelector('.thumb img');
+  if (img) img.src = flower.iconState5 || flower.iconState4 || flower.iconState3;
+
+  // 2) change the caption (simple + clear)
+  const cap = tile.querySelector('.caption');
+  if (cap) cap.textContent = flower.name; // e.g., "Santan", "Kalachuchi", etc.
+
+  // 3) add (or update) a description under the tile
+  let desc = tile.querySelector('.desc');
+  if (!desc) {
+    desc = document.createElement('div');
+    desc.className = 'desc';
+    tile.appendChild(desc);
+  }
+  desc.textContent = flower.fullDesc; // uses your existing fullDesc field
+}
 
 
 function minutesToSeconds(m){ return Math.max(0, Math.round((m || 0) * 60)); }
@@ -512,7 +586,7 @@ function formatTime(total){
 
 //ms animation
 function stageByPercent(flower, pct){
-  pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
+  pct = Math.max(0, Math.min(1, pct || 0));
   if (pct < 0.20) return flower.iconState1;
   if (pct < 0.40) return flower.iconState2;
   if (pct < 0.65) return flower.iconState3;
@@ -531,24 +605,36 @@ function refreshGrowthFlower(pct){
 }
 
 // FLOWER progress: update just the sprite + ETA
-function updateFlowerUI() {
-  const pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
-  growthFlower.src = stageByPercent(currentFlower, pct);
-  growthFlower.alt = `${currentFlower.name} growth ${Math.round(pct*100)}%`;
-  progressBar.value = pct * 100;
-
-  if (!flowerEta) return;
-  if (pct >= 1) {
-    flowerEta.textContent = "Flower grown!";
-  } else if (mode !== 'work') {
-    // Show that growth is paused during breaks
-    flowerEta.textContent = "Growth resumes in Work mode";
-  } else {
-    const minsLeft = Math.ceil((flowerGrowthMs - flowerElapsedMs) / 60000);
-    flowerEta.textContent = `${Math.max(0, minsLeft)} min until grown`;
-  }
+function formatEta(ms) {
+  const totalSec = Math.ceil(Math.max(0, ms) / 1000);
+  if (totalSec < 60) return `${totalSec}s until grown`;
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}m ${String(s).padStart(2,'0')}s until grown`;
 }
 
+function updateFlowerUI() {
+  const pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
+
+  if (growthFlower) {
+    growthFlower.src = stageByPercent(currentFlower, pct);
+    growthFlower.alt = `${currentFlower.name} growth ${Math.round(pct*100)}%`;
+  }
+  if (progressBar) progressBar.value = pct * 100;
+
+  if (!flowerEta) return;
+
+  if (pct >= 1) {
+    flowerEta.textContent = "Flower grown!";
+    // 🔽 swap tile art, caption, and add description
+    markTileGrown(currentKey, currentFlower);
+  } else if (mode !== 'work') {
+    flowerEta.textContent = "Growth resumes in Work mode";
+  } else {
+    const remainingMs = Math.max(0, flowerGrowthMs - flowerElapsedMs);
+    flowerEta.textContent = formatEta(remainingMs);
+  }
+}
 function resetFlower() {
   flowerElapsedMs = 0;
   flowerGrowthMs = Math.max(1, Number((currentFlower && currentFlower.growthTime) || 0));
@@ -628,9 +714,9 @@ function tick(){
 
 
 
-function startCountdown() {
+function startCountdown(){
   const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
-  if (durationForMode <= 0) {
+  if (durationForMode <= 0){
     alert('Please set durations greater than 0 minutes.');
     return;
   }
@@ -638,37 +724,28 @@ function startCountdown() {
   if (totalSeconds <= 0) setMode(mode, true);
 
   isPaused = false;
+  document.getElementById('pause-btn').disabled = false;           // <— enable
+  document.getElementById('pause-label').textContent = 'Pause';    // <— update label
   clearTick();
   updateCounter();
-
   refreshGrowthFlower(computeIntervalPercent());
-
   timer = setInterval(tick, 1000);
-
-  document.getElementById("pause-btn").disabled = false;
-  document.getElementById("pause-label").textContent = "Pause";
 }
 
-function pauseResume() {
-  if (timer == null) return;
-
+function pauseResume(){
   isPaused = !isPaused;
   document.getElementById('pause-label').textContent = isPaused ? 'Resume' : 'Pause';
-
-  if (!isPaused && timer == null) {
-    timer = setInterval(tick, 1000);
-  }
+  if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
 }
 
-function resetTimer() {
+function resetTimer(){
   clearTick();
   isPaused = true;
+  document.getElementById('pause-label').textContent = 'Pause';
   setMode('work', true);
   shortBreaksTaken = 0;
-
-  document.getElementById("pause-btn").disabled = true;
-  document.getElementById("pause-label").textContent = "Pause"; // reset label
 }
+
 
 
 function onIntervalFinished(){
@@ -719,6 +796,8 @@ updateModeLabel();
 updateCounter();
 refreshGrowthFlower(0);
 resetFlower();
+applyAllThumbs();
 </script>
 
+</body>
 </html>
