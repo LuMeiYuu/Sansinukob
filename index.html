@@ -161,6 +161,12 @@
       gap: 5px;
       position: relative;
     }
+
+    .pomobuttons:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     
     .btn-text {
       position: absolute;
@@ -248,7 +254,7 @@
     <span class="btn-text">Start</span>
   </button>
 
-  <button class="pomobuttons" id="pause-btn">
+  <button class="pomobuttons" id="pause-btn" disabled>
     <img id="pause-icon" src="/elements/button.png" style="width: 100%; height: 100%;">
     <span class="btn-text" id="pause-label">Pause</span>
   </button>
@@ -260,10 +266,18 @@
 </div>
 
   <div class="grid">
-      <input type="number" class="placeholder" id="worktime" min="0" placeholder="How long do want to work?" />
-      <input type="number" class="placeholder" id="sBreak"  min="0" placeholder="Short breaks for how long?" />
-      <input type="number" class="placeholder" id="lBreak"  min="0" placeholder="Long breaks for how long?" />
-      <input type="number" class="placeholder" id="bMaxCounter" min="1" placeholder="How many short break do you want to have before getting a long break?" />
+    <input type="number" class="placeholder" id="worktime" min="0" 
+      placeholder="How long do want to work?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="sBreak" min="0" 
+      placeholder="Short breaks for how long?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="lBreak" min="0" 
+      placeholder="Long breaks for how long?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="bMaxCounter" min="1" 
+      placeholder="How many short breaks before a long break?" oninput="this.value = this.value.slice(0, 2)" />
+
     </div>
 
      <div class="growth-wrap">
@@ -490,9 +504,9 @@ function tick(){
 
 
 
-function startCountdown(){
+function startCountdown() {
   const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
-  if (durationForMode <= 0){
+  if (durationForMode <= 0) {
     alert('Please set durations greater than 0 minutes.');
     return;
   }
@@ -503,14 +517,17 @@ function startCountdown(){
   clearTick();
   updateCounter();
 
-  // Make sure the session bar reflects the current starting point
   refreshGrowthFlower(computeIntervalPercent());
-  
 
   timer = setInterval(tick, 1000);
+
+  document.getElementById("pause-btn").disabled = false;
+  document.getElementById("pause-label").textContent = "Pause";
 }
 
 function pauseResume() {
+  if (timer == null) return;
+
   isPaused = !isPaused;
   document.getElementById('pause-label').textContent = isPaused ? 'Resume' : 'Pause';
 
@@ -519,13 +536,16 @@ function pauseResume() {
   }
 }
 
-function resetTimer(){
+function resetTimer() {
   clearTick();
   isPaused = true;
   setMode('work', true);
   shortBreaksTaken = 0;
-  // do not reset flower here unless you want to start plant over
+
+  document.getElementById("pause-btn").disabled = true;
+  document.getElementById("pause-label").textContent = "Pause"; // reset label
 }
+
 
 function onIntervalFinished(){
   // choose next mode and auto-start it
