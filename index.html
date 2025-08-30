@@ -121,10 +121,11 @@
       padding:.8rem 1rem;
       border-radius: var(--r-2);
       border:1px solid var(--ink-4);
-      max-width: min(960px, 96vw);
+      max-width: min(500px, 96vw);
       margin: .5rem auto 0;
-      color: white;
+      color: #e27a3e;
       opacity:.9;
+      font-family: "PanasChill";
     }
     .growth-wrap{
       margin-top:1rem; display:grid; place-items:center; gap:.35rem;
@@ -152,9 +153,33 @@
     .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
     #growthFlower { height: 20vh; margin-left: auto; }
     progress { width: 320px; height: 16px; }
+   
+    .pomobuttons{
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      position: relative;
+    }
+
+    .pomobuttons:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     
-    
-  
+    .btn-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: "PanasChill";
+      font-size: 25px;
+      color: #e27a3e;
+      pointer-events: none;
+}
+
 </style>
   
 </head>
@@ -224,23 +249,36 @@
   </div>
 
   </div>
-    <div class="controls">
-      <button id="start-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-        <img src="/elements/start.png" style="width: 100%; height: 100%;">
-      </button>
-      <button id="pause-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-        <img id="pause-icon" src="/elements/pause.png" style="width: 100%; height: 100%;">
-      </button>
-      <button id="reset-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-        <img src="/elements/reset.png" style="width: 100%; height: 100%;">
-      </button>
-    </div>
+<div class="controls">
+  <button class="pomobuttons" id="start-btn">
+    <img src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text">Start</span>
+  </button>
+
+  <button class="pomobuttons" id="pause-btn" disabled>
+    <img id="pause-icon" src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text" id="pause-label">Pause</span>
+  </button>
+
+  <button class="pomobuttons" id="reset-btn">
+    <img src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text">Reset</span>
+  </button>
+</div>
 
   <div class="grid">
-      <input type="number" class="placeholder" id="worktime" min="0" placeholder="How long do want to work?" />
-      <input type="number" class="placeholder" id="sBreak"  min="0" placeholder="Short breaks for how long?" />
-      <input type="number" class="placeholder" id="lBreak"  min="0" placeholder="Long breaks for how long?" />
-      <input type="number" class="placeholder" id="bMaxCounter" min="1" placeholder="How many short break do you want to have before getting a long break?" />
+    <input type="number" class="placeholder" id="worktime" min="0" 
+      placeholder="How long do want to work?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="sBreak" min="0" 
+      placeholder="Short breaks for how long?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="lBreak" min="0" 
+      placeholder="Long breaks for how long?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="bMaxCounter" min="1" 
+      placeholder="How many short breaks before a long break?" oninput="this.value = this.value.slice(0, 2)" />
+
     </div>
 
      <div class="growth-wrap">
@@ -251,7 +289,7 @@
        <div class="controls">
       <button id="set-btn">Apply Settings</button>
     </div>
-      <div class="settings" id="timeSet">—</div>
+      <div class="settings" id="timeSet">Please enter your desired settings above.</div>
 
       <img id="flowerImg" alt="Flower" />
    <div class="flowerDisplay">
@@ -264,6 +302,17 @@
 
 <script>
   const flowerData = [
+    {
+    name: "Santan",
+    growthTime: "750",
+    lockedDesc: "Where purity lingers in the air.",
+    fullDesc: "Flame of the Woods - ahh yes, this is what Filipino children used to sip for that one drop of sweetness—pure playground treasure.",
+    iconState1: "sprites/SAMPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+  },
   {
     name: "Kalachuchi",
     growthTime: "120000",
@@ -456,9 +505,9 @@ function tick(){
 
 
 
-function startCountdown(){
+function startCountdown() {
   const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
-  if (durationForMode <= 0){
+  if (durationForMode <= 0) {
     alert('Please set durations greater than 0 minutes.');
     return;
   }
@@ -466,31 +515,38 @@ function startCountdown(){
   if (totalSeconds <= 0) setMode(mode, true);
 
   isPaused = false;
-  $('pause-btn').innerText = 'Pause';
   clearTick();
   updateCounter();
 
-  // Make sure the session bar reflects the current starting point
   refreshGrowthFlower(computeIntervalPercent());
-  
 
   timer = setInterval(tick, 1000);
+
+  document.getElementById("pause-btn").disabled = false;
+  document.getElementById("pause-label").textContent = "Pause";
 }
 
-function pauseResume(){
+function pauseResume() {
+  if (timer == null) return;
+
   isPaused = !isPaused;
-  $('pause-btn').innerText = isPaused ? 'Resume' : 'Pause';
-  if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
+  document.getElementById('pause-label').textContent = isPaused ? 'Resume' : 'Pause';
+
+  if (!isPaused && timer == null) {
+    timer = setInterval(tick, 1000);
+  }
 }
 
-function resetTimer(){
+function resetTimer() {
   clearTick();
   isPaused = true;
-  $('pause-btn').innerText = 'Pause';
   setMode('work', true);
   shortBreaksTaken = 0;
-  // do not reset flower here unless you want to start plant over
+
+  document.getElementById("pause-btn").disabled = true;
+  document.getElementById("pause-label").textContent = "Pause"; // reset label
 }
+
 
 function onIntervalFinished(){
   // choose next mode and auto-start it
