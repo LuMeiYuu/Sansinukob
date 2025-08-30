@@ -152,9 +152,27 @@
     .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
     #growthFlower { height: 20vh; margin-left: auto; }
     progress { width: 320px; height: 16px; }
+   
+    .pomobuttons{
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      position: relative;
+    }
     
-    
-  
+    .btn-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: "PanasChill";
+      font-size: 14px;
+      color: #e27a3e;
+      pointer-events: none;
+}
+
 </style>
   
 </head>
@@ -213,7 +231,6 @@
 
   <a id="timer"></a>
 <div class="timer">
-    <div class="gif"><img src="elements/gif.gif" alt="titlescreen gif"></div>
   <div class="menu">
  
 
@@ -225,17 +242,22 @@
   </div>
 
   </div>
-    <div class="controls">
-      <button id="start-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-        <img src="/elements/start.png" style="width: 100%; height: 100%;">
-      </button>
-      <button id="pause-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-        <img id="pause-icon" src="/elements/pause.png" style="width: 100%; height: 100%;">
-      </button>
-      <button id="reset-btn" style="height: 70px; display: flex; align-items: center; justify-content: center; gap: 5px;">
-        <img src="/elements/reset.png" style="width: 100%; height: 100%;">
-      </button>
-    </div>
+<div class="controls">
+  <button class="pomobuttons" id="start-btn">
+    <img src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text">Start</span>
+  </button>
+
+  <button class="pomobuttons" id="pause-btn">
+    <img id="pause-icon" src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text" id="pause-label">Pause</span>
+  </button>
+
+  <button class="pomobuttons" id="reset-btn">
+    <img src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text">Reset</span>
+  </button>
+</div>
 
   <div class="grid">
       <input type="number" class="placeholder" id="worktime" min="0" placeholder="How long do want to work?" />
@@ -478,7 +500,6 @@ function startCountdown(){
   if (totalSeconds <= 0) setMode(mode, true);
 
   isPaused = false;
-  $('pause-btn').innerText = 'Pause';
   clearTick();
   updateCounter();
 
@@ -489,16 +510,18 @@ function startCountdown(){
   timer = setInterval(tick, 1000);
 }
 
-function pauseResume(){
+function pauseResume() {
   isPaused = !isPaused;
-  $('pause-btn').innerText = isPaused ? 'Resume' : 'Pause';
-  if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
+  document.getElementById('pause-label').textContent = isPaused ? 'Resume' : 'Pause';
+
+  if (!isPaused && timer == null) {
+    timer = setInterval(tick, 1000);
+  }
 }
 
 function resetTimer(){
   clearTick();
   isPaused = true;
-  $('pause-btn').innerText = 'Pause';
   setMode('work', true);
   shortBreaksTaken = 0;
   // do not reset flower here unless you want to start plant over
