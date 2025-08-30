@@ -81,4 +81,167 @@
 
 </body>
 
+<script>
+// --- state ---
+// --- state ---
+var totalSeconds = 3600;
+var timer = null;
+var isPaused = false;
+
+// flags
+var timeFinished = false;
+var work = true;
+var sBreak = false;
+var lBreak = false;
+
+const setBtn = document.getElementById("set-btn");
+
+// inputs (minutes)
+let worktime = 0;     // minutes (from UI)
+let sBreaktime = 0;   // minutes (from UI)
+let lBreaktime = 0;   // minutes (from UI)
+let bMaxCounter = 0;  // counter (from UI)
+
+// internal (seconds)
+let workSeconds = 0;
+let sBreakSeconds = 0;
+let lBreakSeconds = 0;
+
+let breakCounter = 0; // how many short breaks taken
+let work = true;
+let sBreak = false;
+let lBreak = false;
+let timeDone = false;
+
+if(work = true, sBreak = false, lBreak = false, breakCounter > bMaxCounter){
+  totalSeconds = workSeconds;
+  work = false; sBreak = true;
+  
+} else if (work = false, sBreak = true, lBreak = false){
+  totalSeconds = sBreakSeconds;
+} else if (work = false, sBreak = false, lBreak = true){
+  totalSeconds = lBreakSeconds;
+}
+
+
+// --- helpers (minutes <-> seconds) ---
+function minutesToSeconds(minutes) {
+  return Math.max(0, Math.floor(minutes * 60));
+}
+
+function secondsToMinutes(seconds) {
+  return Math.max(0, Math.floor(seconds / 60));
+}
+
+// --- set time settings ---
+setBtn.onclick = function () {
+  // Read numeric values from number inputs
+  const w  = document.getElementById("worktime").valueAsNumber;
+  const sb = document.getElementById("sBreak").valueAsNumber;
+  const lb = document.getElementById("lBreak").valueAsNumber;
+  const bc = document.getElementById("bMaxCounter").valueAsNumber;
+
+  // Fallback if any are empty
+  worktime    = Number.isFinite(w)  ? w  : 0;
+  sBreaktime  = Number.isFinite(sb) ? sb : 0;
+  lBreaktime  = Number.isFinite(lb) ? lb : 0;
+  bMaxCounter = Number.isFinite(bc) ? bc : 0;
+
+  // Convert minutes (UI) -> seconds (internal)
+  workSeconds   = minutesToSeconds(worktime);
+  sBreakSeconds = minutesToSeconds(sBreaktime);
+  lBreakSeconds = minutesToSeconds(lBreaktime);
+
+  
+
+  // Show minutes back to the user (as entered)
+  document.getElementById("timeSet").innerText =
+`Work Time: ${worktime} min
+Short Break: ${sBreaktime} min
+Long Break: ${lBreaktime} min
+Break Max Counter: ${bMaxCounter}`;
+
+
+  // Debug for console, show internal seconds
+  console.log({ workSeconds, sBreakSeconds, lBreakSeconds, bMaxCounter, totalSeconds });
+};
+
+
+
+//S O S, jscript is so ass, tulong auq n
+
+
+
+  //format ms to minute second
+  function formatTime(sec) {
+    let minutes = Math.floor((sec % 3600) / 60);
+    let seconds = sec % 60;
+    return (
+      String(minutes).padStart(2, '0') + ":" +
+      String(seconds).padStart(2, '0')
+    );
+  }
+
+  //counter updater for pause and resume
+  function updateCounter() {
+    document.getElementById("counter").innerText = formatTime(totalSeconds);
+  }
+
+function startCountdown() {
+  // If there is already a timer running, stop it
+  if (timer !== null && timer !== undefined) {
+    clearInterval(timer);
+  }
+
+  // Make sure countdown is active, not paused
+  isPaused = false;
+
+  // Update the display before starting
+  updateCounter();
+
+  // Start a new timer that ticks every 1 second
+  timer = setInterval(function() {
+    // Only continue if the countdown is not paused
+    if (isPaused === false) {
+      // Subtract one second
+      totalSeconds = totalSeconds - 1;
+
+      // Update the display
+      updateCounter();
+
+      // If the countdown has reached zero or gone below zero
+      if (totalSeconds <= 0) {
+        // stop the timer
+        clearInterval(timer);
+
+        // Notify the user
+        ;
+      }
+    }
+  }, 1000);
+}
+
+
+
+  document.getElementById("start-btn").onclick = function() {
+    totalSeconds = workSeconds; 
+    startCountdown();
+  };
+
+  document.getElementById("pause-btn").onclick = function() {
+    isPaused = !isPaused;
+    this.innerText = isPaused ? "Resume" : "Pause";
+  };
+
+  window.onload = function() {
+    updateCounter();
+  };
+
+
+
+
+
+  
+</script>
+
 </html>
