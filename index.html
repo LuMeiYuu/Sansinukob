@@ -121,10 +121,11 @@
       padding:.8rem 1rem;
       border-radius: var(--r-2);
       border:1px solid var(--ink-4);
-      max-width: min(960px, 96vw);
+      max-width: min(500px, 96vw);
       margin: .5rem auto 0;
-      color: white;
+      color: #e27a3e;
       opacity:.9;
+      font-family: "PanasChill";
     }
     .growth-wrap{
       margin-top:1rem; display:grid; place-items:center; gap:.35rem;
@@ -148,6 +149,36 @@
         margin: auto;
         margin-top: 1px;
     }
+
+    .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
+    #growthFlower { height: 20vh; margin-left: auto; }
+    progress { width: 320px; height: 16px; }
+   
+    .pomobuttons{
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      position: relative;
+    }
+
+    .pomobuttons:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    
+    .btn-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: "PanasChill";
+      font-size: 25px;
+      color: #e27a3e;
+      pointer-events: none;
+}
 
     .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
     #growthFlower { height: 20vh; margin-left: auto; }
@@ -282,18 +313,14 @@
       <input type="number" class="placeholder" id="bMaxCounter" min="1" placeholder="How many short break do you want to have before getting a long break?" />
     </div>
 
-     <div class="growth-wrap">
-          <img id="growthFlower" alt="Growth Flower" />
-          <div id="growthLabel" style="opacity:.85;font-size:.95rem;"></div>
-        </div>
+
 
        <div class="controls">
-      <button id="set-btn">Apply Settings</button>
+      <button  class="placeholder"id="set-btn">Apply Settings</button>
     </div>
       <div class="settings" id="timeSet">—</div>
 
-      <img id="flowerImg" alt="Flower" />
-   <div class="flowerDisplay">
+    <div class="flowerDisplay">
       <img id="growthFlower" alt="Flower growth" />
       <progress id="progressbar" max="100" value="0"></progress>
       <div id="flowerEta">--</div>
@@ -349,7 +376,18 @@
 </body>
 
 <script>
-  const flowerData = [
+const flowerData = [
+    {
+    name: "Santan",
+    growthTime: "750",
+    lockedDesc: "Where purity lingers in the air.",
+    fullDesc: "Flame of the Woods - ahh yes, this is what Filipino children used to sip for that one drop of sweetness—pure playground treasure.",
+    iconState1: "sprites/SAMPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+  },
   {
     name: "Kalachuchi",
     growthTime: "120000",
