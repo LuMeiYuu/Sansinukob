@@ -3,9 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Menu Bar</title>
+    <style>
+        .menu1-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .menu1-container img {
+            display: block;
+            width: auto;
+        }
+
+        .button {
+            position: absolute;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .home { top: 80px; left: 90px; }
+        .save { top: 245px; left: 90px; } 
+        .calen { top: 335px; left: 90px; }
+        .menu2 { top: 460px; left: 205px; }
+    </style>
 </head>
 <body>
-    
+    <div>
+        <img src="elements/menu1.png" alt="Main Menu" width="500">
+
+         <button class="button home">
+            <img src="elements/home.png" alt="Home" width="320" id="home">
+         </button>
+
+          <button class="button save">
+            <img src="elements/save.png" alt="Save" width="320" id="save">
+         </button>
+         
+          <button class="button calen">
+            <img src="elements/calen.png" alt="Calendar" width="320" id="calendar">
+         </button>
+
+         <button class="button menu2">
+            <img src="elements/menu2.png" alt="Back" width="75" id="back">
+         </button>
+    </div>
+
 </body>
 </html>
