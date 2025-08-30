@@ -83,17 +83,18 @@
     }
 
     button{
-      padding:.7rem 1.1rem;
-      border:1px solid var(--ink-4);
-      background: var(--ink-3);
-      color: var(--text-on-dark);
-      border-radius: var(--r-2);
-      cursor:pointer;
-      font-weight:600;
-      transition: transform .06s ease, background .15s ease;
+      background: none;       /* remove background */
+      border: none;           /* remove border */
+      padding: 0;             /* remove extra spacing */
+      cursor: pointer;
+      transition: opacity 0.2s ease;
     }
-    button:hover{ background:#16223a; }
-    button:active{ transform: translateY(1px); }
+    button:hover img {
+      opacity: 0.8;  /* slightly dim on hover */
+    }
+    button:active img {
+      opacity: 0.5;  /* translucent when clicked */
+    }
 
     .grid{
       display:grid;
@@ -196,8 +197,12 @@
 
   </div>
     <div class="controls">
-      <button id="start-btn">Start</button>
-      <button id="pause-btn">Pause</button>
+      <button id="start-btn" style="width: 80px; height: 40px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <img src="/elements/start.png" style="width: 100%; height: 100%;">
+      </button>
+      <button id="pause-btn" style="width: 80px; height: 40px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <img src="/elements/pause.png" style="width: 100%; height: 100%;">
+      </button>
       <button id="reset-btn">Reset</button>
     </div>
 
