@@ -148,6 +148,10 @@
         margin: auto;
         margin-top: 1px;
     }
+
+    .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
+    #growthFlower { height: 20vh; margin-left: auto; }
+    progress { width: 320px; height: 16px; }
     
     
   
@@ -250,23 +254,19 @@
       <div class="settings" id="timeSet">—</div>
 
       <img id="flowerImg" alt="Flower" />
-  
+   <div class="flowerDisplay">
+      <img id="growthFlower" alt="Flower growth" />
+      <progress id="progressbar" max="100" value="0"></progress>
+      <div id="flowerEta">--</div>
+    </div>
 
 </body>
 
 <script>
-
-
-
- 
-
-//FLOWER OBJECTS BELOW
-
-
-var flowerData = [
+  const flowerData = [
   {
     name: "Kalachuchi",
-    growthTime: "12000",
+    growthTime: "120000",
     lockedDesc: "Where colors dare to speak louder than words.",
     fullDesc: "Frangipani - in places of farewell, it blossoms, it blooms, it shouts athe whisphers of memories and the last farewells.",
     iconState1: "sprites/KALACHUCHI/kal1.png",
@@ -280,7 +280,7 @@ var flowerData = [
     growthTime: "15000",
     lockedDesc: "Where childhood secrets taste sweet.",
     fullDesc: "Arabian Jasmine - you can never go wrong with Philippines' national flower. Strung into garlands, sold outside churches and jeepney stops, always carrying that distinct scent.",
-    iconState1: "sprites/SAMAPAGUITA/sam1.png",
+    iconState1: "sprites/SAMPAGUITA/sam1.png",
     iconState2: "sprites/SAMPAGUITA/sam2.png",
     iconState3: "sprites/SAMPAGUITA/sam3.png",
     iconState4: "sprites/SAMPAGUITA/sam4.png",
@@ -309,219 +309,237 @@ var flowerData = [
     iconState5: "sprites/SAMPAGUITA/sam5.png",
   },
 ];
+//grabs growth in ms
+function getGrowthMs(flower){
+  return Math.max(1, Number(flower?.growthTime) || 0);
+}
 
-//Progress mapping
+// pick which flower to grow during each interval
+let currentFlower = flowerData[0];
+
+// ---------------------------------------------
+// DOM HELPERS & UTILITIES
+// ---------------------------------------------
+const $ = (id) => document.getElementById(id);
+const growthFlower = $("growthFlower");
+const progressBar  = $("progressbar");
+const flowerEta    = $("flowerEta");
+
+let flowerElapsedMs = 0;
+let flowerGrowthMs = getGrowthMs(currentFlower);
 
 
 
-  // Map percentage [0..1] to a sprite stage
-  function stageByPercent(flower, pct) {
-    pct = Math.max(0, Math.min(1, pct));
-    if (pct < 0.20) return flower.iconState1;
-    if (pct < 0.40) return flower.iconState2;
-    if (pct < 0.65) return flower.iconState3;
-    if (pct < 0.85) return flower.iconState4 || flower.iconState3;
-    return flower.iconState5 || flower.iconState4 || flower.iconState3;
+function minutesToSeconds(m){ return Math.max(0, Math.round((m || 0) * 60)); }
+function formatTime(total){
+  total = Math.max(0, total|0);
+  const m = Math.floor(total/60);
+  const s = total % 60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+//ms animation
+function stageByPercent(flower, pct){
+  pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
+  if (pct < 0.20) return flower.iconState1;
+  if (pct < 0.40) return flower.iconState2;
+  if (pct < 0.65) return flower.iconState3;
+  if (pct < 0.85) return flower.iconState4 || flower.iconState3;
+  return flower.iconState5 || flower.iconState4 || flower.iconState3;
+}
+
+
+
+
+
+// SESSION progress only (keep the bar for timer progress)
+function refreshGrowthFlower(pct){
+  pct = Math.max(0, Math.min(1, pct || 0));
+  
+}
+
+// FLOWER progress: update just the sprite + ETA
+function updateFlowerUI() {
+  const pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
+  growthFlower.src = stageByPercent(currentFlower, pct);
+  growthFlower.alt = `${currentFlower.name} growth ${Math.round(pct*100)}%`;
+  progressBar.value = pct * 100;
+
+  if (!flowerEta) return;
+  if (pct >= 1) {
+    flowerEta.textContent = "Flower grown!";
+  } else if (mode !== 'work') {
+    // Show that growth is paused during breaks
+    flowerEta.textContent = "Growth resumes in Work mode";
+  } else {
+    const minsLeft = Math.ceil((flowerGrowthMs - flowerElapsedMs) / 60000);
+    flowerEta.textContent = `${Math.max(0, minsLeft)} min until grown`;
+  }
+}
+
+function resetFlower() {
+  flowerElapsedMs = 0;
+  flowerGrowthMs = Math.max(1, Number((currentFlower && currentFlower.growthTime) || 0));
+  updateFlowerUI();
+}
+
+// ---------------------------------------------
+// TIMER STATE
+// ---------------------------------------------
+let timer = null;
+let isPaused = true;
+
+// durations (seconds)
+let workSeconds   = 25 * 60;
+let shortSeconds  = 5 * 60;
+let longSeconds   = 15 * 60;
+
+// how many short breaks between long ones
+let maxShortsBeforeLong = 4; // after 4 work sessions, take a long break
+
+// runtime counters
+let totalSeconds = workSeconds;         // remaining seconds in current interval
+let intervalTotalSeconds = workSeconds; // fixed length of the current interval
+let shortBreaksTaken = 0;               // increments after finishing a short break cycle
+
+// current mode: 'work' | 'short' | 'long'
+let mode = 'work';
+
+function updateCounter(){ $('counter').innerText = formatTime(totalSeconds); }
+function updateModeLabel(){ $('modeLabel').innerText = `Mode: ${mode[0].toUpperCase()}${mode.slice(1)}`; }
+
+function computeIntervalPercent(){
+  const elapsed = Math.max(0, intervalTotalSeconds - totalSeconds);
+  const pct = elapsed / Math.max(1, intervalTotalSeconds);
+  return Math.max(0, Math.min(1, pct));
+}
+
+function setMode(nextMode, setFreshTime = true){
+  mode = nextMode;
+  updateModeLabel();
+
+  if (setFreshTime){
+    if (mode === 'work')  totalSeconds = workSeconds;
+    if (mode === 'short') totalSeconds = shortSeconds;
+    if (mode === 'long')  totalSeconds = longSeconds;
   }
 
+  // reset the interval baseline whenever the mode changes
+  intervalTotalSeconds = Math.max(1, totalSeconds);
+  updateCounter();
+
+  // reset session progress bar at the start of a new interval
+  refreshGrowthFlower(0);
+}
+
+function clearTick(){ if (timer != null){ clearInterval(timer); timer = null; } }
+
+function tick(){
+  if (isPaused) return;
+  totalSeconds -= 1;
+  updateCounter();
+
+  // Session progress (progress bar)
+  refreshGrowthFlower(computeIntervalPercent());
+
+  // Flower grows during WORK only (1s per tick)
+  if (mode === 'work') {
+    flowerElapsedMs = Math.min(flowerGrowthMs, flowerElapsedMs + 1000);
+    updateFlowerUI();
+  }
+
+  if (totalSeconds <= 0){
+    clearTick();
+    onIntervalFinished();
+  }
+}
 
 
-    // Garden thumbs
-    const garden = document.getElementById("garden");
-    if (garden) {
-      garden.innerHTML = "";
-      flowerData.forEach(flower => {
-        const img = new Image();
-        img.src = flower.image || flower.iconState1;
-        img.alt = flower.name;
-        img.title = flower.name;
-        garden.appendChild(img);
-      });
-    }
 
-    // Sampaguita growth demo (independent)
-    const sampaguita = flowerData.find(f => f.name === "Sampaguita");
-    const stageImg = $("stageImg");
-    if (sampaguita && stageImg) {
-      const sprites = [
-        sampaguita.iconState1,
-        sampaguita.iconState2,
-        sampaguita.iconState3,
-        sampaguita.iconState4,
-        sampaguita.iconState5,
-      ].filter(Boolean);
+function startCountdown(){
+  const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
+  if (durationForMode <= 0){
+    alert('Please set durations greater than 0 minutes.');
+    return;
+  }
 
-      let i = 0;
-      const nextStage = () => {
-        stageImg.src = sprites[i % sprites.length];
-        stageImg.alt = `${sampaguita.name} stage ${((i % sprites.length) + 1)}`;
-        i++;
-      };
-      nextStage();
-      setInterval(nextStage, 2000);
-    }
+  if (totalSeconds <= 0) setMode(mode, true);
+
+  isPaused = false;
+  $('pause-btn').innerText = 'Pause';
+  clearTick();
+  updateCounter();
+
+  // Make sure the session bar reflects the current starting point
+  refreshGrowthFlower(computeIntervalPercent());
   
 
-  // ---------------------- GROWTH FLOWER (timer-linked) ----------------------
-  const growthFlowerName = "Sampaguita"; // change to any name in flowerData
-  const growthFlower = flowerData.find(f => f.name === growthFlowerName) || flowerData[0];
+  timer = setInterval(tick, 1000);
+}
 
-  // Will be set to the total seconds of the current interval whenever mode changes
-  let intervalTotalSeconds = 25 * 60;
+function pauseResume(){
+  isPaused = !isPaused;
+  $('pause-btn').innerText = isPaused ? 'Resume' : 'Pause';
+  if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
+}
 
-  function refreshGrowthFlower(percentThroughInterval = 0) {
-    if (!growthFlower) return;
-    const img = document.getElementById("growthFlower");
-    const label = document.getElementById("growthLabel");
-    if (!img || !label) return;
+function resetTimer(){
+  clearTick();
+  isPaused = true;
+  $('pause-btn').innerText = 'Pause';
+  setMode('work', true);
+  shortBreaksTaken = 0;
+  // do not reset flower here unless you want to start plant over
+}
 
-    img.src = stageByPercent(growthFlower, percentThroughInterval);
-    img.alt = `${growthFlower.name} growth`;
-    const pctText = Math.round(percentThroughInterval * 100);
-    label.textContent = `${growthFlower.name} • ${pctText}% grown`;
-  }
-
-//TIMER PROPER FROM BELOW
-
- let timer = null;
-    let isPaused = true;
-
-    // durations (seconds)
-    let workSeconds   = 25 * 60;
-    let shortSeconds  = 5 * 60;
-    let longSeconds   = 15 * 60;
-
-    // how many short breaks between long ones
-    let maxShortsBeforeLong = 4; // after 4 work sessions, take a long break
-
-    // runtime counters
-    let totalSeconds = workSeconds;
-    let shortBreaksTaken = 0; // increments after finishing a short break cycle
-
-    // current mode: 'work' | 'short' | 'long'
-    let mode = 'work';
-
-    // ---------------- Helpers ----------------
-    const $ = (id) => document.getElementById(id);
-
-    function minutesToSeconds(m) { return Math.max(0, Math.floor(Number(m || 0) * 60)); }
-
-    function formatTime(sec) {
-      const s = Math.max(0, Math.floor(sec));
-      const mm = String(Math.floor(s / 60)).padStart(2, '0');
-      const ss = String(s % 60).padStart(2, '0');
-      return `${mm}:${ss}`;
-    }
-
-    function updateCounter() { $('counter').innerText = formatTime(totalSeconds); }
-    function updateModeLabel() { $('modeLabel').innerText = `Mode: ${mode[0].toUpperCase()}${mode.slice(1)}`; }
-
-    function setMode(nextMode, setFreshTime = true) {
-      mode = nextMode;
-      updateModeLabel();
-      if (setFreshTime) {
-        if (mode === 'work') totalSeconds = workSeconds;
-        if (mode === 'short') totalSeconds = shortSeconds;
-        if (mode === 'long') totalSeconds = longSeconds;
-      }
-      updateCounter();
-    }
-
-    function clearTick() {
-      if (timer != null) { clearInterval(timer); timer = null; }
-    }
-
-    function tick() {
-      if (isPaused) return;
-      totalSeconds -= 1;
-      updateCounter();
-      if (totalSeconds <= 0) {
-        clearTick();
-        onIntervalFinished();
-      }
-    }
-
-    function startCountdown() {
-      // if durations are zero, avoid infinite loops
-      const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
-      if (durationForMode <= 0) {
-        alert('Please set durations greater than 0 minutes.');
-        return;
-      }
-
-      // If no remaining time (e.g., after a reset), reload the current mode duration
-      if (totalSeconds <= 0) setMode(mode, true);
-
-      isPaused = false;
-      clearTick();
-      updateCounter();
-      timer = setInterval(tick, 1000);
-    }
-
-    function pauseResume() {
-      isPaused = !isPaused;
-      $('pause-btn').innerText = isPaused ? 'Resume' : 'Pause';
-      if (!isPaused && timer == null) {
-        timer = setInterval(tick, 1000);
-      }
-    }
-
-    function resetTimer() {
-      clearTick();
-      isPaused = true;
-      $('pause-btn').innerText = 'Pause';
-      setMode('work', true);
+function onIntervalFinished(){
+  // choose next mode and auto-start it
+  if (mode === 'work'){
+    if ((shortBreaksTaken + 1) >= maxShortsBeforeLong){
+      setMode('long', true);
       shortBreaksTaken = 0;
+    } else {
+      setMode('short', true);
+      shortBreaksTaken += 1;
     }
+  } else {
+    setMode('work', true);
+  }
+  startCountdown();
+}
 
-    function onIntervalFinished() {
-      // when an interval hits 0, choose the next mode and auto-start it
-      if (mode === 'work') {
-        // After finishing WORK: decide short vs long break
-        if ((shortBreaksTaken + 1) >= maxShortsBeforeLong) {
-          setMode('long', true);
-          shortBreaksTaken = 0; // reset the cycle when taking a long break
-        } else {
-          setMode('short', true);
-          shortBreaksTaken += 1; // we are about to take a short break in this cycle
-        }
-      } else if (mode === 'short') {
-        setMode('work', true);
-      } else if (mode === 'long') {
-        setMode('work', true);
-      }
-      // auto-continue
-      startCountdown();
-    }
+// ---------- Settings ----------
+$('set-btn').onclick = function(){
+  const w  = $('worktime').valueAsNumber;
+  const sb = $('sBreak').valueAsNumber;
+  const lb = $('lBreak').valueAsNumber;
+  const bc = $('bMaxCounter').valueAsNumber;
 
-    // ---------------- Settings ----------------
-    $('set-btn').onclick = function () {
-      const w  = $('worktime').valueAsNumber;
-      const sb = $('sBreak').valueAsNumber;
-      const lb = $('lBreak').valueAsNumber;
-      const bc = $('bMaxCounter').valueAsNumber;
+  workSeconds  = minutesToSeconds(Number.isFinite(w)  ? w  : 25);
+  shortSeconds = minutesToSeconds(Number.isFinite(sb) ? sb : 5);
+  longSeconds  = minutesToSeconds(Number.isFinite(lb) ? lb : 15);
+  maxShortsBeforeLong = Math.max(1, Math.floor(Number.isFinite(bc) ? bc : 4));
 
-      workSeconds  = minutesToSeconds(Number.isFinite(w)  ? w  : 25);
-      shortSeconds = minutesToSeconds(Number.isFinite(sb) ? sb : 5);
-      longSeconds  = minutesToSeconds(Number.isFinite(lb) ? lb : 15);
-      maxShortsBeforeLong = Math.max(1, Math.floor(Number.isFinite(bc) ? bc : 4));
+  // Keep current mode but refresh remaining time to match new settings
+  setMode(mode, true);
 
-      // keep current mode but refresh remaining time to match new settings
-      setMode(mode, true);
+  $('timeSet').innerText =
+`Work Time: ${Math.floor(workSeconds/60)} min
+Short Break: ${Math.floor(shortSeconds/60)} min
+Long Break: ${Math.floor(longSeconds/60)} min
+Shorts before Long: ${maxShortsBeforeLong}`;
+};
 
-      $('timeSet').innerText =
-`Work Time: ${Math.floor(workSeconds/60)} min\nShort Break: ${Math.floor(shortSeconds/60)} min\nLong Break: ${Math.floor(longSeconds/60)} min\nShorts before Long: ${maxShortsBeforeLong}`;
-    };
+// ---------- Button bindings ----------
+$('start-btn').onclick = startCountdown;
+$('pause-btn').onclick = pauseResume;
+$('reset-btn').onclick = resetTimer;
 
-    // event callers
-    $('start-btn').onclick = startCountdown;
-    $('pause-btn').onclick = pauseResume;
-    $('reset-btn').onclick = resetTimer;
-
-    // initial call for statuses
-    updateModeLabel();
-    updateCounter();
-
+// ---------- Initial UI ----------
+updateModeLabel();
+updateCounter();
+refreshGrowthFlower(0);
+resetFlower();
 </script>
 
 </html>
