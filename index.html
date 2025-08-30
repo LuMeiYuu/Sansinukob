@@ -83,17 +83,18 @@
     }
 
     button{
-      padding:.7rem 1.1rem;
-      border:1px solid var(--ink-4);
-      background: var(--ink-3);
-      color: var(--text-on-dark);
-      border-radius: var(--r-2);
-      cursor:pointer;
-      font-weight:600;
-      transition: transform .06s ease, background .15s ease;
+      background: none;       /* remove background */
+      border: none;           /* remove border */
+      padding: 0;             /* remove extra spacing */
+      cursor: pointer;
+      transition: opacity 0.2s ease;
     }
-    button:hover{ background:#16223a; }
-    button:active{ transform: translateY(1px); }
+    button:hover img {
+      opacity: 0.8;  /* slightly dim on hover */
+    }
+    button:active img {
+      opacity: 0.5;  /* translucent when clicked */
+    }
 
     .grid{
       display:grid;
@@ -124,6 +125,9 @@
       color: var(--text-on-dark);
       opacity:.9;
     }
+    .growth-wrap{
+      margin-top:1rem; display:grid; place-items:center; gap:.35rem;
+   }
 </style>
   
 </head>
@@ -196,8 +200,12 @@
 
   </div>
     <div class="controls">
-      <button id="start-btn">Start</button>
-      <button id="pause-btn">Pause</button>
+      <button id="start-btn" style="width: 80px; height: 40px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <img src="/elements/start.png" style="width: 100%; height: 100%;">
+      </button>
+      <button id="pause-btn" style="width: 80px; height: 40px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+        <img src="/elements/pause.png" style="width: 100%; height: 100%;">
+      </button>
       <button id="reset-btn">Reset</button>
     </div>
 
@@ -208,15 +216,150 @@
       <input type="number" id="bMaxCounter" min="1" placeholder="Shorts before long eg. 4" />
     </div>
 
+     <div class="growth-wrap">
+          <img id="growthFlower" alt="Growth Flower" />
+          <div id="growthLabel" style="opacity:.85;font-size:.95rem;"></div>
+        </div>
+
        <div class="controls">
       <button id="set-btn">Apply Settings</button>
     </div>
       <div class="settings" id="timeSet">—</div>
+
+      <img id="flowerImg" alt="Flower" />
   
 
 </body>
 
 <script>
+
+
+
+ 
+
+//FLOWER OBJECTS BELOW
+
+
+var flowerData = [
+  {
+    name: "Kalachuchi",
+    growthTime: "12000",
+    lockedDesc: "Where colors dare to speak louder than words.",
+    fullDesc: "Frangipani - in places of farewell, it blossoms, it blooms, it shouts athe whisphers of memories and the last farewells.",
+    iconState1: "sprites/KALACHUCHI/kal1.png",
+    iconState2: "sprites/KALACHUCHI/kal2.png",
+    iconState3: "sprites/KALACHUCHI/kal3.png",
+    iconState4: "sprites/KALACHUCHI/kal4.png",
+    iconState5: "sprites/KALACHUCHI/kal5.png",
+  },
+  {
+    name: "Sampaguita",
+    growthTime: "15000",
+    lockedDesc: "Where childhood secrets taste sweet.",
+    fullDesc: "Arabian Jasmine - you can never go wrong with Philippines' national flower. Strung into garlands, sold outside churches and jeepney stops, always carrying that distinct scent.",
+    iconState1: "sprites/SAMAPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+  },
+  {
+    name: "Kahoy-Dalaga",
+    growthTime: "30000",
+    lockedDesc: "Where fallen petals still smile.",
+    fullDesc: "Mussaenda Philippica - blooms like a constellation brought down to earth, each petal a luminous star resting on emerald skies.",
+    iconState1: "sprites/MUSSAENDA/mussa1.png",
+    iconState2: "sprites/MUSSAENDA/mussa2.png",
+    iconState3: "sprites/MUSSAENDA/mussa3.png",
+    iconState4: "sprites/MUSSAENDA/mussa4.png",
+    iconState5: "sprites/MUSSAENDA/mussa5.png",
+  },
+  {
+    name: "Mirasol",
+    growthTime: "45000",
+    lockedDesc: "Where tiny sunshines are met.",
+    fullDesc: "Sunflower - a poetic symbolism of Filipinos' perceverance, standing tall always turning its face where the light shines.",
+    iconState1: "sprites/SAMPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+  },
+];
+
+//Progress mapping
+
+
+
+  // Map percentage [0..1] to a sprite stage
+  function stageByPercent(flower, pct) {
+    pct = Math.max(0, Math.min(1, pct));
+    if (pct < 0.20) return flower.iconState1;
+    if (pct < 0.40) return flower.iconState2;
+    if (pct < 0.65) return flower.iconState3;
+    if (pct < 0.85) return flower.iconState4 || flower.iconState3;
+    return flower.iconState5 || flower.iconState4 || flower.iconState3;
+  }
+
+
+
+    // Garden thumbs
+    const garden = document.getElementById("garden");
+    if (garden) {
+      garden.innerHTML = "";
+      flowerData.forEach(flower => {
+        const img = new Image();
+        img.src = flower.image || flower.iconState1;
+        img.alt = flower.name;
+        img.title = flower.name;
+        garden.appendChild(img);
+      });
+    }
+
+    // Sampaguita growth demo (independent)
+    const sampaguita = flowerData.find(f => f.name === "Sampaguita");
+    const stageImg = $("stageImg");
+    if (sampaguita && stageImg) {
+      const sprites = [
+        sampaguita.iconState1,
+        sampaguita.iconState2,
+        sampaguita.iconState3,
+        sampaguita.iconState4,
+        sampaguita.iconState5,
+      ].filter(Boolean);
+
+      let i = 0;
+      const nextStage = () => {
+        stageImg.src = sprites[i % sprites.length];
+        stageImg.alt = `${sampaguita.name} stage ${((i % sprites.length) + 1)}`;
+        i++;
+      };
+      nextStage();
+      setInterval(nextStage, 2000);
+    }
+  
+
+  // ---------------------- GROWTH FLOWER (timer-linked) ----------------------
+  const growthFlowerName = "Sampaguita"; // change to any name in flowerData
+  const growthFlower = flowerData.find(f => f.name === growthFlowerName) || flowerData[0];
+
+  // Will be set to the total seconds of the current interval whenever mode changes
+  let intervalTotalSeconds = 25 * 60;
+
+  function refreshGrowthFlower(percentThroughInterval = 0) {
+    if (!growthFlower) return;
+    const img = document.getElementById("growthFlower");
+    const label = document.getElementById("growthLabel");
+    if (!img || !label) return;
+
+    img.src = stageByPercent(growthFlower, percentThroughInterval);
+    img.alt = `${growthFlower.name} growth`;
+    const pctText = Math.round(percentThroughInterval * 100);
+    label.textContent = `${growthFlower.name} • ${pctText}% grown`;
+  }
+
+//TIMER PROPER FROM BELOW
+
  let timer = null;
     let isPaused = true;
 
