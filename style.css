@@ -68,7 +68,7 @@ html {
     opacity: 0.35;
 }
 
-.logo {
+#logo {
     position: absolute;
     pointer-events: none;
     z-index: 1000; /* topmost layer */
