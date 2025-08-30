@@ -4,7 +4,10 @@ var flowerData = [
   {
     name: "Rose",
     growthTime: 30,
-    image: "icons/rose.png"
+    image: "icons/rose.png",
+    sprite1: "icons/rose_stage1.png",
+    sprite2: "icons/rose_stage2.png",
+    sprite3: "icons/rose_stage3.png"
   },
   {
     name: "Tulip",
