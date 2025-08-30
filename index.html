@@ -388,11 +388,20 @@
 
 </body>
 
+
+
 <script>
+
+  const form = document.getElementById('flowerForm');
+  const result = document.getElementById('result');
+// ---------------------------------------------
+// SPRITES / FLOWERS
+// ---------------------------------------------
+
   const flowerData = [
     {
     name: "Santan",
-    growthTime: "750",
+    growthTime: 12000,
     lockedDesc: "Where purity lingers in the air.",
     fullDesc: "Flame of the Woods - ahh yes, this is what Filipino children used to sip for that one drop of sweetness—pure playground treasure.",
     iconState1: "sprites/SANTAN/san1.png",
@@ -403,7 +412,7 @@
   },
   {
     name: "Kalachuchi",
-    growthTime: "120000",
+    growthTime: 120000,
     lockedDesc: "Where colors dare to speak louder than words.",
     fullDesc: "Frangipani - in places of farewell, it blossoms, it blooms, it shouts athe whisphers of memories and the last farewells.",
     iconState1: "sprites/KALACHUCHI/kal1.png",
@@ -414,7 +423,7 @@
   },
   {
     name: "Sampaguita",
-    growthTime: "15000",
+    growthTime: 15000,
     lockedDesc: "Where childhood secrets taste sweet.",
     fullDesc: "Arabian Jasmine - you can never go wrong with Philippines' national flower. Strung into garlands, sold outside churches and jeepney stops, always carrying that distinct scent.",
     iconState1: "sprites/SAMPAGUITA/sam1.png",
@@ -425,7 +434,7 @@
   },
   {
     name: "Kahoy-Dalaga",
-    growthTime: "30000",
+    growthTime: 30000,
     lockedDesc: "Where fallen petals still smile.",
     fullDesc: "Mussaenda Philippica - blooms like a constellation brought down to earth, each petal a luminous star resting on emerald skies.",
     iconState1: "sprites/MUSSAENDA/mussa1.png",
@@ -436,7 +445,7 @@
   },
   {
     name: "Mirasol",
-    growthTime: "45000",
+    growthTime: 45000,
     lockedDesc: "Where tiny sunshines are met.",
     fullDesc: "Sunflower - a poetic symbolism of Filipinos' perceverance, standing tall always turning its face where the light shines.",
     iconState1: "sprites/SUNFLOWER/sun1.png",
@@ -446,45 +455,51 @@
     iconState5: "sprites/SUNFLOWER/sun5.png",
   },
 ];
-//grabs growth in ms
+//grabs 
+let currentFlower = flowerData[0];
+// Only react to flower radio changes inside .flower-grid
+document.querySelector('.flower-grid').addEventListener('change', (e) => {
+  const input = e.target.closest('input[name="flower"]');
+  if (!input) return; // ignore unrelated changes
+
+  const value = input.value.toLowerCase();
+  const result = document.getElementById('result'); // may not exist
+
+  switch (value) {
+    case 'santan':
+      currentFlower = flowerData[0];
+      if (result) result.textContent = 'You chose Santan! 🌺';
+      break;
+    case 'kalachuchi':
+      currentFlower = flowerData[1];
+      if (result) result.textContent = 'You chose Kalachuchi! 🌼';
+      break;
+    case 'sampaguita':
+      currentFlower = flowerData[2];
+      if (result) result.textContent = 'You chose Sampaguita! 🌸';
+      break;
+    case 'mussaenda':
+      currentFlower = flowerData[3];
+      if (result) result.textContent = 'You chose Mussaenda! 🌺';
+      break;
+    case 'sunflower':
+      currentFlower = flowerData[4];
+      if (result) result.textContent = 'You chose Mirasol! 🌻';
+      break;
+  }
+
+  resetFlower();
+  updateFlowerUI();
+});
+
+
 function getGrowthMs(flower){
   return Math.max(1, Number(flower?.growthTime) || 0);
 }
 
 // pick which flower to grow during each interval
 
-var currentFlower = flowerData[0];
- document.addEventListener('change', (e) => {
-    const value = e.target.value; // santan | kalachuchi | sunflower | sampaguita | mussaenda
 
-
-    // switch for messaging / branching
-    switch (value) {
-      case 'santan':
-        currentFlower = flowerData[0];
-        result.textContent = 'You chose Santan! �';
-        break;
-      case 'kalachuchi':
-        currentFlower = flowerData[1];
-        result.textContent = 'You chose Kalachuchi! 🌼';
-        break;
-      case 'sampaguita':
-        currentFlower = flowerData[1];
-        result.textContent = 'You chose Sampaguita! 🌸';
-        break;
-      case 'mussaenda':
-        currentFlower = flowerData[3];
-        result.textContent = 'You chose Mussaenda! 🌺';
-        break;
-    
-      default:
-        result.textContent = 'Pick a flower.';
-        currentFlower = flowerData[0];
-    }
-
-    // (optional) do something with currentFlower, e.g. update an image:
-    // document.querySelector('#preview').src = currentFlower.iconState1;
-  });
 // ---------------------------------------------
 // DOM HELPERS & UTILITIES
 // ---------------------------------------------
@@ -508,7 +523,7 @@ function formatTime(total){
 
 //ms animation
 function stageByPercent(flower, pct){
-  pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
+  pct = Math.max(0, Math.min(1, pct || 0));
   if (pct < 0.20) return flower.iconState1;
   if (pct < 0.40) return flower.iconState2;
   if (pct < 0.65) return flower.iconState3;
@@ -527,23 +542,36 @@ function refreshGrowthFlower(pct){
 }
 
 // FLOWER progress: update just the sprite + ETA
+function formatEta(ms) {
+  const totalSec = Math.ceil(Math.max(0, ms) / 1000);
+  if (totalSec < 60) return `${totalSec}s until grown`;
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}m ${String(s).padStart(2,'0')}s until grown`;
+}
+
 function updateFlowerUI() {
   const pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
-  growthFlower.src = stageByPercent(currentFlower, pct);
-  growthFlower.alt = `${currentFlower.name} growth ${Math.round(pct*100)}%`;
-  progressBar.value = pct * 100;
+
+  if (growthFlower) {
+    growthFlower.src = stageByPercent(currentFlower, pct);
+    growthFlower.alt = `${currentFlower.name} growth ${Math.round(pct*100)}%`;
+  }
+  if (progressBar) progressBar.value = pct * 100;
 
   if (!flowerEta) return;
+
   if (pct >= 1) {
     flowerEta.textContent = "Flower grown!";
   } else if (mode !== 'work') {
-    // Show that growth is paused during breaks
+    // paused during non-work intervals
     flowerEta.textContent = "Growth resumes in Work mode";
   } else {
-    const minsLeft = Math.ceil((flowerGrowthMs - flowerElapsedMs) / 60000);
-    flowerEta.textContent = `${Math.max(0, minsLeft)} min until grown`;
+    const remainingMs = Math.max(0, flowerGrowthMs - flowerElapsedMs);
+    flowerEta.textContent = formatEta(remainingMs);
   }
 }
+
 
 function resetFlower() {
   flowerElapsedMs = 0;
@@ -624,9 +652,9 @@ function tick(){
 
 
 
-function startCountdown() {
+function startCountdown(){
   const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
-  if (durationForMode <= 0) {
+  if (durationForMode <= 0){
     alert('Please set durations greater than 0 minutes.');
     return;
   }
@@ -634,37 +662,28 @@ function startCountdown() {
   if (totalSeconds <= 0) setMode(mode, true);
 
   isPaused = false;
+  document.getElementById('pause-btn').disabled = false;           // <— enable
+  document.getElementById('pause-label').textContent = 'Pause';    // <— update label
   clearTick();
   updateCounter();
-
   refreshGrowthFlower(computeIntervalPercent());
-
   timer = setInterval(tick, 1000);
-
-  document.getElementById("pause-btn").disabled = false;
-  document.getElementById("pause-label").textContent = "Pause";
 }
 
-function pauseResume() {
-  if (timer == null) return;
-
+function pauseResume(){
   isPaused = !isPaused;
   document.getElementById('pause-label').textContent = isPaused ? 'Resume' : 'Pause';
-
-  if (!isPaused && timer == null) {
-    timer = setInterval(tick, 1000);
-  }
+  if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
 }
 
-function resetTimer() {
+function resetTimer(){
   clearTick();
   isPaused = true;
+  document.getElementById('pause-label').textContent = 'Pause';
   setMode('work', true);
   shortBreaksTaken = 0;
-
-  document.getElementById("pause-btn").disabled = true;
-  document.getElementById("pause-label").textContent = "Pause"; // reset label
 }
+
 
 
 function onIntervalFinished(){
@@ -717,4 +736,5 @@ refreshGrowthFlower(0);
 resetFlower();
 </script>
 
+</body>
 </html>
