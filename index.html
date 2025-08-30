@@ -152,6 +152,44 @@
     .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
     #growthFlower { height: 20vh; margin-left: auto; }
     progress { width: 320px; height: 16px; }
+
+     .flower-grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  .option {
+    position: relative; border-radius: 14px; overflow: hidden; cursor: pointer;
+    background: #fff; box-shadow: 0 6px 18px rgba(2,6,23,.08);
+    transition: transform .12s ease, box-shadow .12s ease;
+    display: block;
+  }
+  .option:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(2,6,23,.12); }
+  .option input {
+    position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  }
+  .thumb { aspect-ratio: 1 / 1; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .2s ease; }
+  .option:hover .thumb img { transform: scale(1.04); }
+
+  .caption {
+    position: absolute; left: 10px; bottom: 10px;
+    font: 600 13px/1.1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: #fff; background: rgba(0,0,0,.45);
+    padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(4px);
+  }
+  .check {
+    position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
+    border-radius: 999px; background: #fff; color: var(--accent);
+    display: grid; place-items: center; font-weight: 800;
+    box-shadow: 0 6px 18px rgba(2,6,23,.18); opacity: 0; transform: scale(.8);
+    transition: .15s ease;
+  }
+
+  /* Selected state */
+  .option input:checked + .thumb { outline: 3px solid var(--accent); outline-offset: -3px; }
+  .option input:focus-visible + .thumb { outline: 3px solid var(--accent); outline-offset: -3px; }
+  .option input:checked ~ .check { opacity: 1; transform: scale(1); }
+
     
     
   
@@ -259,6 +297,53 @@
       <progress id="progressbar" max="100" value="0"></progress>
       <div id="flowerEta">--</div>
     </div>
+
+     <div class="flower-grid">
+    <label class="option">
+      <input type="radio" id="santan" name="flower" value="santan" />
+      <figure class="thumb">
+        <img src="sprites/SANTAN/san5.png" alt="Santan" />
+      </figure>
+      <span class="caption">Santan</span>
+      <span class="check" aria-hidden="true">✓</span>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="kalachuchi" name="flower" value="kalachuchi" />
+      <figure class="thumb">
+        <img src="sprites/KALACHUCHI/kal5.png" alt="Kalachuchi" />
+      </figure>
+      <span class="caption">Kalachuchi</span>
+      <span class="check" aria-hidden="true">✓</span>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="sunflower" name="flower" value="sunflower" class="sunflower" />
+      <figure class="thumb">
+        <img src="sprites/SUNFLOWER/sun5.png" alt="Sunflower" />
+      </figure>
+      <span class="caption">Sunflower</span>
+      <span class="check" aria-hidden="true">✓</span>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="sampaguita" name="flower" value="sampaguita" />
+      <figure class="thumb">
+        <img src="sprites/SAMPAGUITA/sam5.png" alt="Sampaguita" />
+      </figure>
+      <span class="caption">Sampaguita</span>
+      <span class="check" aria-hidden="true">✓</span>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="mussaenda" name="flower" value="mussaenda" />
+      <figure class="thumb">
+        <img src="sprites/MUSSAENDA/mussa5.png" alt="Mussaenda" />
+      </figure>
+      <span class="caption">Mussaenda</span>
+      <span class="check" aria-hidden="true">✓</span>
+    </label>
+  </div>
 
 </body>
 
