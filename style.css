@@ -33,7 +33,7 @@ html {
 
 .titlescreen {
     position: relative;
-    width: 100.2%;    
+    width: 100%;    
     min-height: 100vh;
     padding: 2rem 1rem;     
     background-image: url("bg.png"); 
@@ -194,14 +194,13 @@ hr{
 .timer {
 
     background:
-        linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-        url(/elements/bg2.png);
-    width: 100.2%;
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+    url(/elements/bg2.png);
+    width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
     padding: 1rem;
-    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     min-height: 100vh;
 }
@@ -228,17 +227,14 @@ li img {
 }
 
    .counter-disp{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  background-image:url(icons/timerbg.png);
-  background-repeat:no-repeat;
-  background-position:top center;
-  background-size:min(420px, 70vw) auto;
-
-    min-height:483px;      /* floor */
-  min-height:380px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:flex-start;
+        background-image:url(icons/timerbg.png);
+        background-repeat:no-repeat;
+        background-position:top center;
+        min-height: 380px;
   
 
 
@@ -246,16 +242,20 @@ li img {
 
 
 #counter {
- font-family: 'PanasChill';
-  font-size: clamp(32px, 8vw, 72px); /* much smaller & responsive */
-  line-height: 1;
-  margin: .25rem 0 .2rem;
+    font-family: 'PanasChill';
+    font-size: clamp(32px, 8vw, 72px); /* much smaller & responsive */
+    line-height: 1;
+    padding-top: 110px;
+    color: #9f512c; 
+    font-size: 100px;
+    margin: 0px;
 }
 
 #modeLabel{
     font-family: 'Golden Age Mini';
     font-size: 3vh;
     color: #e27a3e;
+    margin: 0px;
 }
 
 * {

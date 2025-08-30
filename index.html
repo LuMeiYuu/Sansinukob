@@ -75,7 +75,7 @@
     }
 
     .grid{
-      display:grid;
+      display: none;
       grid-template-columns: repeat(4, minmax(140px,1fr));
       gap:8px;
       max-width: min(960px, 96vw);
@@ -136,7 +136,7 @@
     progress { width: 320px; height: 30px; }
    
     .pomobuttons{
-      height: 70px;
+      height: 120px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -360,17 +360,17 @@ position: absolute;
 <div class="controls">
   <button class="pomobuttons" id="start-btn">
     <img src="/elements/button.png" style="width: 100%; height: 100%;">
-    <span class="btn-text">Start</span>
+    <span class="btn-text">START</span>
   </button>
 
   <button class="pomobuttons" id="pause-btn" disabled>
     <img id="pause-icon" src="/elements/button.png" style="width: 100%; height: 100%;">
-    <span class="btn-text" id="pause-label">Pause</span>
+    <span class="btn-text" id="pause-label">PAUSE</span>
   </button>
 
   <button class="pomobuttons" id="reset-btn">
     <img src="/elements/button.png" style="width: 100%; height: 100%;">
-    <span class="btn-text">Reset</span>
+    <span class="btn-text">RESET</span>
   </button>
 </div>
 
@@ -396,7 +396,7 @@ position: absolute;
       white-space: pre-wrap;
       min-height: 30px;"  type="button"   id="set-btn" value="Apply Settings">
     </div>
-      <div class="settings" id="timeSet">Please enter your desired settings above.</div>
+      <!-- <div class="settings" id="timeSet">Please enter your desired settings above.</div> -->
 
     <div class="flowerDisplay">
       <img id="growthFlower" alt="Flower growth" />
@@ -698,7 +698,7 @@ function startCountdown(){
 
   isPaused = false;
   document.getElementById('pause-btn').disabled = false;           // <— enable
-  document.getElementById('pause-label').textContent = 'Pause';    // <— update label
+  document.getElementById('pause-label').textContent = 'PAUSE';    // <— update label
   clearTick();
   updateCounter();
   refreshGrowthFlower(computeIntervalPercent());
@@ -707,14 +707,14 @@ function startCountdown(){
 
 function pauseResume(){
   isPaused = !isPaused;
-  document.getElementById('pause-label').textContent = isPaused ? 'Resume' : 'Pause';
+  document.getElementById('pause-label').textContent = isPaused ? 'RESUME' : 'PAUSE';
   if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
 }
 
 function resetTimer(){
   clearTick();
   isPaused = true;
-  document.getElementById('pause-label').textContent = 'Pause';
+  document.getElementById('pause-label').textContent = 'PAUSE';
   setMode('work', true);
   shortBreaksTaken = 0;
 }
