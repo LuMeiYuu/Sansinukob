@@ -223,7 +223,7 @@ li img {
     
 }
 
-.counter {
+.counter-disp {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -235,7 +235,7 @@ li img {
     max-height: 40vh;
 }
 
-#timer-display {
+#counter {
     font-family: 'PanasChill';
     margin-top: 20vh; 
     font-size: 15vh;
@@ -243,7 +243,7 @@ li img {
     margin-bottom: 3px;
 }
 
-#flowerdisplay{
+#modeLabel{
     font-family: 'Golden Age Mini';
     font-size: 3vh;
     color: #e27a3e;
