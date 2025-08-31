@@ -24,8 +24,14 @@ body{ font-family:"Stardew Valley", system-ui, -apple-system, Segoe UI, Roboto, 
 .top-image2{ position:absolute; right:85vw; bottom:-10vh; width:200px; pointer-events:none; z-index:30; }
 .container{ width:100%; display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; }
 .btn{ display:flex; justify-content:center; align-items:center; margin:.5rem; min-width:140px; min-height:40px; font-size:1rem; padding:.5rem 1rem; color:#0a0a23; border-radius:8px; text-decoration:none; }
-.about{ background-color:#fae792; background-image:linear-gradient(to bottom, #ecac22 0%, #f0bc40 40%, #fae792 100%); background-repeat:no-repeat; background-size:100% 120px; background-position:top; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; padding:2rem 1rem; width:100%; z-index:10; }
-p{ font-family:"Garet"; font-size:clamp(1rem, 2.4vw, 1.25rem); color:#0a0a23; text-align:justify; margin:1rem auto; max-width:min(860px, 90vw); }
+.about{ position:relative; background-color:#fae792; background-image:linear-gradient(to bottom, #ecac22 0%, #f0bc40 40%, #fae792 100%); background-repeat:no-repeat; background-size:100% 120px; background-position:top; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; padding:2rem 1rem; width:100%; z-index:10; }
+p{ position:relative;z-index: 2; font-family:"Garet"; font-size:clamp(1rem, 2.4vw, 1.25rem); color:#0a0a23; text-align:justify; margin:1rem auto; max-width:min(860px, 90vw); }
+.about p:last-of-type{
+  background: url("elements/credits.png") center/contain no-repeat;
+  /* optional spacing so the art doesn’t crowd the text */
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
 #about-header1{ max-width:90vw; margin:1rem auto; }
 #about-header2{ max-width:90vw; margin:1rem auto; text-align:center; }
 #about-header2 img{ display:inline-block; max-width:100%; height:auto; vertical-align:middle; }
@@ -195,6 +201,7 @@ progress{ width:min(90vw, 420px); height:30px; }
   <p>
     Sansinukob is a nonprofit Pomodoro timer website and farming simulator heavily inspired by Stardew Valley. It features pixelated native and genetically modified plants from UPLB’s Makiling Botanic Garden (e.g., Mussaenda philippica). It serves as an official entry to the CodeSprout 2025 Hackathon developed by UPLB BS Computer Science students. Special acknowledgement is given to Stardew Valley for being the primary creative inspiration behind the project.
   </p>
+
 
 </div>
 
@@ -375,27 +382,28 @@ const flowerEta    = $("flowerEta");
 let flowerElapsedMs = 0;
 let flowerGrowthMs = getGrowthMs(currentFlower);
 
+//this switches when the flower is fully grown
 function markTileGrown(key, flower){
-  // find the label.option that contains this radio
+ 
   const tile = document.getElementById(key)?.closest('.option');
   if (!tile) return;
 
-  // 1) swap the thumb image to the final sprite
+  
   const img = tile.querySelector('.thumb img');
   if (img) img.src = flower.iconState5 || flower.iconState4 || flower.iconState3;
 
-  // 2) change the caption (simple + clear)
-  const cap = tile.querySelector('.caption');
-  if (cap) cap.textContent = flower.name; // e.g., "Santan", "Kalachuchi", etc.
 
-  // 3) add (or update) a description under the tile
+  const cap = tile.querySelector('.caption');
+  if (cap) cap.textContent = flower.name; 
+
+ 
   let desc = tile.querySelector('.desc');
   if (!desc) {
     desc = document.createElement('div');
     desc.className = 'desc';
     tile.appendChild(desc);
   }
-  desc.textContent = flower.fullDesc; // uses your existing fullDesc field
+  desc.textContent = flower.fullDesc; 
   desc.style.fontFamily = '"PanasChill", sans-serif';
   desc.style.color = "#44140c";
 }
@@ -409,7 +417,7 @@ function formatTime(total){
   return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 
-//ms animation
+//sprite animation
 function stageByPercent(flower, pct){
   pct = Math.max(0, Math.min(1, pct || 0));
   if (pct < 0.20) return flower.iconState1;
@@ -423,13 +431,13 @@ function stageByPercent(flower, pct){
 
 
 
-// SESSION progress only (keep the bar for timer progress)
+
 function refreshGrowthFlower(pct){
   pct = Math.max(0, Math.min(1, pct || 0));
   
 }
 
-// FLOWER progress: update just the sprite + ETA
+// FLOWER progress independent of time
 function formatEta(ms) {
   const totalSec = Math.ceil(Math.max(0, ms) / 1000);
   if (totalSec < 60) return `${totalSec}s until grown`;
