@@ -31,10 +31,10 @@ p{ font-family:"Garet"; font-size:clamp(1rem, 2.4vw, 1.25rem); color:#0a0a23; te
 #about-header2 img{ display:inline-block; max-width:100%; height:auto; vertical-align:middle; }
 hr{ border:none; border-top:1px solid #ecac22; margin:2rem 0; }
 .timer{ background:url("/elements/bg2.png"); background-size:100% 100%; background-repeat:no-repeat; background-position:top; position:relative; overflow:hidden; padding:2rem 1rem; }
-.counter-disp{ display:flex; flex-direction:column; align-items:center; justify-content:flex-start; background-image:url(icons/timerbg.png); background-repeat:no-repeat; background-position:top center; min-height:380px; }
-#counter{ font-family:"PanasChill"; font-size:clamp(42px, 12vw, 100px); line-height:1; padding-top:min(18vh, 110px); color:#9f512c; margin:0; text-align:center; }
-#modeLabel{ font-family:"Golden Age Mini"; font-size:clamp(16px, 3.5vw, 24px); color:#e27a3e; margin:0; text-align:center; }
-.controls{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:1vh auto; }
+ .counter-disp{ display:grid; grid-template-rows:auto auto; justify-items:center; align-content:start; gap:.5rem; background-image:url(icons/timerbg.png); background-repeat:no-repeat; background-position:top center; background-size:contain; min-height:clamp(240px, 52vw, 440px); padding-top:clamp(48px, 14vw, 120px); }
+#counter{ font-family:"PanasChill"; font-size:clamp(36px, 20vw, 108px); line-height:1; color:#9f512c; margin:0; text-align:center; }
+#modeLabel{ font-family:"Golden Age Mini"; font-size:clamp(14px, 6vw, 24px); color:#e27a3e; margin:0; text-align:center; }
+ .controls{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:1vh auto; }
 button{ background:none; border:none; padding:0; cursor:pointer; transition:opacity .2s ease; }
 button:hover img{ opacity:.8; }
 button:active img{ opacity:.5; }
