@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="icons/pegaraw.jpg">
+  <title>Sansinukob</title>
+<style>
+
+  :root{
+      /* Palette */
+      --ink-1:#0b1220;
+      --ink-2:#ffd789;
+      --ink-3:#121a2a;
+      --ink-4:#3f0f08;
+
+      --sun-1:#ecac22;
+      --sun-2:#f0bc40;
+      --sun-3:#fae792;
+
+      --accent:#e27a3e;
+      --text-on-dark:#e6edf3;
+      --text-on-sun:#0a0a23;
+
+      /* Radii & spacing */
+      --r-1:8px;
+      --r-2:4px;
+      --gap-1:.5rem;
+      --gap-2:1rem;
+      --gap-3:2rem;
+
+      /* Shadows */
+      --shadow-1:0 2px 4px rgba(0,0,0,.2);
+    }
+
+    .desc{
+  font: 500 12px/1.35 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #2b2b2b;
+  padding: 8px 10px 10px;
+}
+    
+      .timer {
+      background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+        url("/elements/bg2.png");
+      background-size:cover;
+      background-position: top center;
+      padding: 2rem 4vw 4rem;
+      min-height: 100vh;
+      box-shadow: var(--shadow-1);
+    }
+
+
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:center;
+      margin: 1vh;
+    }
+
+    button{
+      background: none;       /* remove background */
+      border: none;           /* remove border */
+      padding: 0;             /* remove extra spacing */
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    button:hover img {
+      opacity: 0.8;  /* slightly dim on hover */
+    }
+    button:active img {
+      opacity: 0.5;  /* translucent when clicked */
+    }
+
+    .grid{
+      display: none;
+      grid-template-columns: repeat(4, minmax(140px,1fr));
+      gap:8px;
+      max-width: min(960px, 96vw);
+      height: 40px;
+      margin: 0 auto;
+    }
+
+    .grid input{
+      width:100%;
+      padding:.6rem .8rem;
+      border-radius: var(--r-2);
+      border:1px solid var(--ink-4);
+      background: var(--ink-2);
+      outline:none;
+      
+    }
+
+    .settings{
+      white-space:pre-line;
+      background: var(--ink-2);
+      padding:.8rem 1rem;
+      border-radius: var(--r-2);
+      border:1px solid var(--ink-4);
+      max-width: min(500px, 96vw);
+      max-width: min(500px, 96vw);
+      margin: .5rem auto 0;
+      color: #e27a3e;
+      color: #e27a3e;
+      opacity:.9;
+      font-family: "PanasChill";
+      font-family: "PanasChill";
+    }
+    .growth-wrap{
+      margin-top:1rem; display:grid; place-items:center; gap:.35rem;
+   }
+
+    .placeholder{
+      color: var(--accent);
+      font-family: "PanasChill";
+      font-size: 20px;
+      align-items: center;
+      white-space: pre-wrap;
+      min-height: 80px;
+    }
+
+      .placeholder::placeholder{
+        color: var(--accent);
+        font-family: "PanasChill";
+        font-size: .9rem;
+        margin: 1rem;
+        white-space: pre-wrap;
+        margin: auto;
+        margin-top: 1px;
+    }
+
+    .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
+    #growthFlower { height: 20vh; margin-left: auto; margin-right: auto;}
+    progress { width: 320px; height: 30px; }
+   
+    .pomobuttons{
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      position: relative;
+    }
+
+    .pomobuttons:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    
+    .btn-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: "PanasChill";
+      font-size: 25px;
+      color: #e27a3e;
+      pointer-events: none;
+}
+
+
+     .flower-grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  .option {
+    position: relative; border-radius: 14px; overflow: hidden; cursor: pointer;
+    background: #fff; box-shadow: 0 6px 18px rgba(2,6,23,.08);
+    transition: transform .12s ease, box-shadow .12s ease;
+    display: block;
+  }
+  .option:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(2,6,23,.12); }
+  .option input {
+    position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  }
+  .thumb { position: relative;aspect-ratio: 1 / 1; overflow: hidden; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .2s ease; }
+  .option:hover .thumb img { transform: scale(1.04); }
+
+  .caption {
+position: absolute;
+  left: 10px; bottom: 60px;
+  font: 600 13px/1.1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #fff; background: rgba(0,0,0,.45);
+  padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(4px);
+  }
+  .check {
+    position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
+    border-radius: 999px; background: #fff; color: var(--accent);
+    display: grid; place-items: center; font-weight: 800;
+    box-shadow: 0 6px 18px rgba(2,6,23,.18); opacity: 0; transform: scale(.8);
+    transition: .15s ease;
+  }
+
+  /* Selected state */
+  .option input:checked + .thumb { outline: 3px solid var(--accent); outline-offset: -3px; }
+  .option input:focus-visible + .thumb { outline: 3px solid var(--accent); outline-offset: -3px; }
+  .option input:checked ~ .check { opacity: 1; transform: scale(1); }
+
+    #flowerEta {
+        font-family: "Golden Age Mini", "Golden Age", ui-serif, Georgia, serif;
+      font-size: clamp(14px, 3.2vw, 22px);
+      color: var(--accent);
+      letter-spacing:.06em;
+      opacity:.95;
+      margin: 2rem;
+    }
+
+.desc{
+  font: 500 12px/1.35 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #2b2b2b;
+  padding: 8px 10px 10px;
+}
+ 
+.existing-section {
+  position: relative;       /* allows children to use absolute positioning */
+  padding: 20px;
+  background-color: #fafafa;
+  height: 300px;
+  border: 1px solid #ccc;
+}
+
+.side-div-container {
+  position: absolute;       /* allows overlapping */
+  top: 50px;                /* distance from top of section */
+  right: 20px;              /* distance from right */
+  display: flex;
+  flex-direction: column;   /* stack vertically */
+  gap: 10px;
+  z-index: 10;              /* ensures it overlaps other elements */
+}
+
+.side-div {
+  width: 150px;
+  height: 50px;
+  background-color: lightblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+</style>
+<script>
+    const flowerData = [
+    {
+    name: "Santan",
+    growthTime: 12000,
+    lockedDesc: "Where purity lingers in the air.",
+    fullDesc: "Flame of the Woods - ahh yes, this is what Filipino children used to sip for that one drop of sweetness—pure playground treasure.",
+    iconState1: "sprites/SANTAN/san1.png",
+    iconState2: "sprites/SANTAN/san2.png",
+    iconState3: "sprites/SANTAN/san3.png",
+    iconState4: "sprites/SANTAN/san4.png",
+    iconState5: "sprites/SANTAN/san5.png",
+      thumbLocked: "sprites/SANTAN/santanblack.png",
+    thumbGrown:  "sprites/SANTAN/san5.png",
+  },
+  {
+    name: "Kalachuchi",
+    growthTime: 12000,
+    lockedDesc: "Where colors dare to speak louder than words.",
+    fullDesc: "Frangipani - in places of farewell, it blossoms, it blooms, it shouts athe whisphers of memories and the last farewells.",
+    iconState1: "sprites/KALACHUCHI/kal1.png",
+    iconState2: "sprites/KALACHUCHI/kal2.png",
+    iconState3: "sprites/KALACHUCHI/kal3.png",
+    iconState4: "sprites/KALACHUCHI/kal4.png",
+    iconState5: "sprites/KALACHUCHI/kal5.png",
+        thumbLocked: "sprites/KALACHUCHI/kalachuchiblack.png",
+    thumbGrown:  "sprites/KALACHUCHI/kal5.png",
+  },
+  {
+    name: "Sampaguita",
+    growthTime: 12000,
+    lockedDesc: "Where childhood secrets taste sweet.",
+    fullDesc: "Arabian Jasmine - you can never go wrong with Philippines' national flower. Strung into garlands, sold outside churches and jeepney stops, always carrying that distinct scent.",
+    iconState1: "sprites/SAMPAGUITA/sam1.png",
+    iconState2: "sprites/SAMPAGUITA/sam2.png",
+    iconState3: "sprites/SAMPAGUITA/sam3.png",
+    iconState4: "sprites/SAMPAGUITA/sam4.png",
+    iconState5: "sprites/SAMPAGUITA/sam5.png",
+    thumbLocked: "sprites/SAMPAGUITA/sampaguitablack.png",
+    thumbGrown:  "sprites/SAMPAGUITA/sam5.png",
+  },
+  {
+    name: "Kahoy-Dalaga",
+    growthTime: 12000,
+    lockedDesc: "Where fallen petals still smile.",
+    fullDesc: "Mussaenda Philippica - blooms like a constellation brought down to earth, each petal a luminous star resting on emerald skies.",
+    iconState1: "sprites/MUSSAENDA/mussa1.png",
+    iconState2: "sprites/MUSSAENDA/mussa2.png",
+    iconState3: "sprites/MUSSAENDA/mussa3.png",
+    iconState4: "sprites/MUSSAENDA/mussa4.png",
+    iconState5: "sprites/MUSSAENDA/mussa5.png",
+        thumbLocked: "sprites/MUSSAENDA/mussaendablack.png",
+    thumbGrown:  "sprites/MUSSAENDA/mussa5.png",
+  },
+  {
+    name: "Mirasol",
+    growthTime: 12000,
+    lockedDesc: "Where tiny sunshines are met.",
+    fullDesc: "Sunflower - a poetic symbolism of Filipinos' perceverance, standing tall always turning its face where the light shines.",
+    iconState1: "sprites/SUNFLOWER/sun1.png",
+    iconState2: "sprites/SUNFLOWER/sun2.png",
+    iconState3: "sprites/SUNFLOWER/sun3.png",
+    iconState4: "sprites/SUNFLOWER/sun4.png",
+    iconState5: "sprites/SUNFLOWER/sun5.png",
+    thumbLocked: "sprites/SUNFLOWER/sunblack.png",
+    thumbGrown:  "sprites/SUNFLOWER/sun5.png"
+  },
+];
+
+
+</script>
+  
+</head>
+<body>
+
+<div class="titlescreen">
+  <div class="gif"><img src="elements/gif.gif" alt="titlescreen gif"></div>
+<div id="logo">
+  <img src="icons/logo.png" alt="Logo">
+</div>
+    <div class="container">
+  <a class="btn" href="#timer">
+    <img src="icons/start.png" alt="Start Button">
+  </a>
+  <a href="#about" class="btn">
+    <img src="icons/about.png" alt="About Button">
+  </a>
+  </div>
+</div>
+
+
+  </div>
+
+  <div class="image-overlay-wrapper">
+  <img src="icons/tree.png" alt="tree" class="top-image1">
+   <img src="icons/cat.png" alt="cat" class="top-image2">
+</div>
+
+<a id="about"></a>
+  <div class="about">
+  <img src="icons/about-header1.png" alt="About Header"  id="about-header1">
+
+
+  <div id="about-header2">
+    <img src="icons/about-header2.png" alt="About Header2" >
+  </div>
+
+  <p>
+    As a farmer, your goal is to stay productive while harvesting a variety of plants each day. Each study session helps your plants grow, and every plant has its own growth time before it can be harvested. As you progress, you’ll unlock rarer plants to grow and collect. Take on the challenge, accomplish your tasks, and build a flourishing collection!
+  </p>
+
+  <img src="/elements/div.png" style="
+    width: 100%
+  ;">
+
+  <div id="about-header2">
+    <img src="icons/about-header3.png" alt="About Header2" >
+  </div>  
+
+  <img src="/elements/div.png" style="
+    width: 100%
+  ;">
+
+  <p>
+    Sansinukob is a nonprofit Pomodoro timer website and farming simulator heavily inspired by Stardew Valley. It features pixelated native and genetically modified plants from UPLB’s Makiling Botanic Garden (e.g., Mussaenda philippica). It serves as an official entry to the CodeSprout 2025 Hackathon developed by UPLB BS Computer Science students. Special acknowledgement is given to Stardew Valley for being the primary creative inspiration behind the project.
+  </p>
+
+</div>
+
+  <a id="timer"></a>
+<div class="timer">
+  
+  <div class="side-div-container">
+    <div class="side-div">Div 1</div>
+    <div class="side-div">Div 3</div>
+  </div>
+</div>
+
+ 
+    <div class="counter-disp">
+    <h1 id="counter" >25:00</h1>
+    <h3 class="mode" id="modeLabel"> UNDER DEVELOPMENT </h3>
+
+  </div>
+
+  
+<div class="controls">
+  <button class="pomobuttons" id="start-btn">
+    <img src="/elements/button.png" style="width: 140px; height: 72px;">
+    <span class="btn-text" style="font-size: 30px; margin-top: 5px;">START</span>
+  </button>
+
+  <button class="pomobuttons" id="pause-btn" disabled>
+    <img id="pause-icon" src="/elements/button.png" style="width: 140px; height: 72px;">
+    <span class="btn-text" id="pause-label" style="font-size: 30px; margin-top: 5px;">PAUSE</span>
+  </button>
+
+  <button class="pomobuttons" id="reset-btn">
+    <img src="/elements/button.png" style="width: 140px; height: 72px;">
+    <span class="btn-text" style="font-size: 30px; margin-top: 5px;">RESET</span>
+  </button>
+</div>
+
+  <div class="grid">
+    <input type="number" class="placeholder" id="worktime" min="0" 
+      placeholder="How long do want to work?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="sBreak" min="0" 
+      placeholder="Short breaks for how long?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="lBreak" min="0" 
+      placeholder="Long breaks for how long?" oninput="this.value = this.value.slice(0, 2)" />
+
+    <input type="number" class="placeholder" id="bMaxCounter" min="1" 
+      placeholder="How many short breaks before a long break?" oninput="this.value = this.value.slice(0, 2)" />
+
+    </div>
+
+
+
+    <div class="controls">
+      <input style="margin-top: 10px; height: 15px;font-family:'PanasChill' ;color: var(--accent);font-size: 20px;align-items: center;
+      white-space: pre-wrap;
+      min-height: 50px; min-width: 200px;"  type="button"   id="set-btn" value="Apply Settings">
+    </div>
+      <!-- <div class="settings" id="timeSet">Please enter your desired settings above.</div> -->
+
+    <div class="flowerDisplay">
+      <img id="growthFlower" alt="Flower growth" />
+      <progress id="progressbar" max="100" value="0"></progress>
+      <div id="flowerEta">--</div>
+    </div>
+
+     <div class="flower-grid">
+    <label class="option">
+      <input type="radio" id="santan" name="flower" value="santan" />
+      <figure class="thumb">
+        <img src="sprites/SANTAN/santanblack.png" alt="Santan" />
+      </figure>
+      <span class="caption">Where purity lingers in the air.</span>
+      <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="kalachuchi" name="flower" value="kalachuchi" />
+      <figure class="thumb">
+        <img src="sprites/KALACHUCHI/kalachuchiblack.png" alt="Kalachuchi" />
+      </figure>
+      <span class="caption">Where colors dare to speak louder than words.</span>
+      <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="sunflower" name="flower" value="sunflower" class="sunflower" />
+      <figure class="thumb">
+        <img src="sprites/SUNFLOWER/sunblack.png" alt="Sunflower" />
+      </figure>
+      <span class="caption">Where tiny sunshines are met.</span>
+      <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="sampaguita" name="flower" value="sampaguita" />
+      <figure class="thumb">
+        <img src="sprites/SAMPAGUITA/sampaguitablack.png" alt="Sampaguita" />
+      </figure>
+      <span class="caption">Where childhood secrets taste sweet.</span>
+      <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
+    </label>
+
+    <label class="option">
+      <input type="radio" id="mussaenda" name="flower" value="mussaenda" />
+      <figure class="thumb">
+        <img src="sprites/MUSSAENDA/mussaendablack.png" alt="Mussaenda" />
+      </figure>
+      <span class="caption">Where fallen petals still smile.</span>
+      <span class="check" aria-hidden="true">✓</span>
+      <div class="desc"></div>
+    </label>
+  </div>
+
+</body>
+
+
+
+<script>
+
+  const form = document.getElementById('flowerForm');
+  const result = document.getElementById('result');
+// ---------------------------------------------
+// SPRITES / FLOWERS
+// ---------------------------------------------
+
+
+//grabs 
+let currentFlower = flowerData[0];
+let currentKey = 'santan'; 
+// Only react to flower radio changes inside .flower-grid
+document.querySelector('.flower-grid').addEventListener('change', (e) => {
+  const input = e.target.closest('input[name="flower"]');
+  if (!input) return;
+
+  const value = input.value.toLowerCase();
+  currentKey = value; 
+  switch (value) {
+    case 'santan':
+      currentFlower = flowerData[0];
+      if (result) result.textContent = 'You chose Santan! 🌺';
+      break;
+    case 'kalachuchi':
+      currentFlower = flowerData[1];
+      if (result) result.textContent = 'You chose Kalachuchi! 🌼';
+      break;
+    case 'sampaguita':
+      currentFlower = flowerData[2];
+      if (result) result.textContent = 'You chose Sampaguita! 🌸';
+      break;
+    case 'mussaenda':
+      currentFlower = flowerData[3];
+      if (result) result.textContent = 'You chose Mussaenda! 🌺';
+      break;
+    case 'sunflower':
+      currentFlower = flowerData[4];
+      if (result) result.textContent = 'You chose Mirasol! 🌻';
+      break;
+  }
+
+  resetFlower();
+  updateFlowerUI();
+});
+
+
+function getGrowthMs(flower){
+  return Math.max(1, Number(flower?.growthTime) || 0);
+}
+
+// pick which flower to grow during each interval
+
+
+// ---------------------------------------------
+// DOM HELPERS & UTILITIES
+// ---------------------------------------------
+const $ = (id) => document.getElementById(id);
+const growthFlower = $("growthFlower");
+const progressBar  = $("progressbar");
+const flowerEta    = $("flowerEta");
+
+let flowerElapsedMs = 0;
+let flowerGrowthMs = getGrowthMs(currentFlower);
+
+function markTileGrown(key, flower){
+  // find the label.option that contains this radio
+  const tile = document.getElementById(key)?.closest('.option');
+  if (!tile) return;
+
+  // 1) swap the thumb image to the final sprite
+  const img = tile.querySelector('.thumb img');
+  if (img) img.src = flower.iconState5 || flower.iconState4 || flower.iconState3;
+
+  // 2) change the caption (simple + clear)
+  const cap = tile.querySelector('.caption');
+  if (cap) cap.textContent = flower.name; // e.g., "Santan", "Kalachuchi", etc.
+
+  // 3) add (or update) a description under the tile
+  let desc = tile.querySelector('.desc');
+  if (!desc) {
+    desc = document.createElement('div');
+    desc.className = 'desc';
+    tile.appendChild(desc);
+  }
+  desc.textContent = flower.fullDesc; // uses your existing fullDesc field
+}
+
+
+function minutesToSeconds(m){ return Math.max(0, Math.round((m || 0) * 60)); }
+function formatTime(total){
+  total = Math.max(0, total|0);
+  const m = Math.floor(total/60);
+  const s = total % 60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+//ms animation
+function stageByPercent(flower, pct){
+  pct = Math.max(0, Math.min(1, pct || 0));
+  if (pct < 0.20) return flower.iconState1;
+  if (pct < 0.40) return flower.iconState2;
+  if (pct < 0.65) return flower.iconState3;
+  if (pct < 0.85) return flower.iconState4 || flower.iconState3;
+  return flower.iconState5 || flower.iconState4 || flower.iconState3;
+}
+
+
+
+
+
+// SESSION progress only (keep the bar for timer progress)
+function refreshGrowthFlower(pct){
+  pct = Math.max(0, Math.min(1, pct || 0));
+  
+}
+
+// FLOWER progress: update just the sprite + ETA
+function formatEta(ms) {
+  const totalSec = Math.ceil(Math.max(0, ms) / 1000);
+  if (totalSec < 60) return `${totalSec}s until grown`;
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${m}m ${String(s).padStart(2,'0')}s until grown`;
+}
+
+function updateFlowerUI() {
+  const pct = Math.min(1, flowerElapsedMs / flowerGrowthMs);
+
+  if (growthFlower) {
+    growthFlower.src = stageByPercent(currentFlower, pct);
+    growthFlower.alt = `${currentFlower.name} growth ${Math.round(pct*100)}%`;
+  }
+  if (progressBar) progressBar.value = pct * 100;
+
+  if (!flowerEta) return;
+
+  if (pct >= 1) {
+    flowerEta.textContent = "Flower grown!";
+    // 🔽 swap tile art, caption, and add description
+    markTileGrown(currentKey, currentFlower);
+  } else if (mode !== 'work') {
+    flowerEta.textContent = "Growth resumes in Work mode";
+  } else {
+    const remainingMs = Math.max(0, flowerGrowthMs - flowerElapsedMs);
+    flowerEta.textContent = formatEta(remainingMs);
+  }
+}
+function resetFlower() {
+  flowerElapsedMs = 0;
+  flowerGrowthMs = Math.max(1, Number((currentFlower && currentFlower.growthTime) || 0));
+  updateFlowerUI();
+}
+
+// ---------------------------------------------
+// TIMER STATE
+// ---------------------------------------------
+let timer = null;
+let isPaused = true;
+
+// durations (seconds)
+let workSeconds   = 25 * 60;
+let shortSeconds  = 5 * 60;
+let longSeconds   = 15 * 60;
+
+// how many short breaks between long ones
+let maxShortsBeforeLong = 4; // after 4 work sessions, take a long break
+
+// runtime counters
+let totalSeconds = workSeconds;         // remaining seconds in current interval
+let intervalTotalSeconds = workSeconds; // fixed length of the current interval
+let shortBreaksTaken = 0;               // increments after finishing a short break cycle
+
+// current mode: 'work' | 'short' | 'long'
+let mode = 'work';
+
+function updateCounter(){ $('counter').innerText = formatTime(totalSeconds); }
+function updateModeLabel(){ $('modeLabel').innerText = `Mode: ${mode[0].toUpperCase()}${mode.slice(1)}`; }
+
+function computeIntervalPercent(){
+  const elapsed = Math.max(0, intervalTotalSeconds - totalSeconds);
+  const pct = elapsed / Math.max(1, intervalTotalSeconds);
+  return Math.max(0, Math.min(1, pct));
+}
+
+function setMode(nextMode, setFreshTime = true){
+  mode = nextMode;
+  updateModeLabel();
+
+  if (setFreshTime){
+    if (mode === 'work')  totalSeconds = workSeconds;
+    if (mode === 'short') totalSeconds = shortSeconds;
+    if (mode === 'long')  totalSeconds = longSeconds;
+  }
+
+  // reset the interval baseline whenever the mode changes
+  intervalTotalSeconds = Math.max(1, totalSeconds);
+  updateCounter();
+
+  // reset session progress bar at the start of a new interval
+  refreshGrowthFlower(0);
+}
+
+function clearTick(){ if (timer != null){ clearInterval(timer); timer = null; } }
+
+function tick(){
+  if (isPaused) return;
+  totalSeconds -= 1;
+  updateCounter();
+
+  // Session progress (progress bar)
+  refreshGrowthFlower(computeIntervalPercent());
+
+  // Flower grows during WORK only (1s per tick)
+  if (mode === 'work') {
+    flowerElapsedMs = Math.min(flowerGrowthMs, flowerElapsedMs + 1000);
+    updateFlowerUI();
+  }
+
+  if (totalSeconds <= 0){
+    clearTick();
+    onIntervalFinished();
+  }
+}
+
+
+
+function startCountdown(){
+  const durationForMode = (mode === 'work') ? workSeconds : (mode === 'short' ? shortSeconds : longSeconds);
+  if (durationForMode <= 0){
+    alert('Please set durations greater than 0 minutes.');
+    return;
+  }
+
+  if (totalSeconds <= 0) setMode(mode, true);
+
+  isPaused = false;
+  document.getElementById('pause-btn').disabled = false;           // <— enable
+  document.getElementById('pause-label').textContent = 'PAUSE';    // <— update label
+  clearTick();
+  updateCounter();
+  refreshGrowthFlower(computeIntervalPercent());
+  timer = setInterval(tick, 1000);
+}
+
+function pauseResume(){
+  isPaused = !isPaused;
+  document.getElementById('pause-label').textContent = isPaused ? 'RESUME' : 'PAUSE';
+  if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
+}
+
+function resetTimer(){
+  clearTick();
+  isPaused = true;
+  document.getElementById('pause-label').textContent = 'PAUSE';
+  setMode('work', true);
+  shortBreaksTaken = 0;
+}
+
+
+
+function onIntervalFinished(){
+  // choose next mode and auto-start it
+  if (mode === 'work'){
+    if ((shortBreaksTaken + 1) >= maxShortsBeforeLong){
+      setMode('long', true);
+      shortBreaksTaken = 0;
+    } else {
+      setMode('short', true);
+      shortBreaksTaken += 1;
+    }
+  } else {
+    setMode('work', true);
+  }
+  startCountdown();
+}
+
+// ---------- Settings ----------
+$('set-btn').onclick = function(){
+  const w  = $('worktime').valueAsNumber;
+  const sb = $('sBreak').valueAsNumber;
+  const lb = $('lBreak').valueAsNumber;
+  const bc = $('bMaxCounter').valueAsNumber;
+
+  workSeconds  = minutesToSeconds(Number.isFinite(w)  ? w  : 25);
+  shortSeconds = minutesToSeconds(Number.isFinite(sb) ? sb : 5);
+  longSeconds  = minutesToSeconds(Number.isFinite(lb) ? lb : 15);
+  maxShortsBeforeLong = Math.max(1, Math.floor(Number.isFinite(bc) ? bc : 4));
+
+  // Keep current mode but refresh remaining time to match new settings
+  setMode(mode, true);
+
+  $('timeSet').innerText =
+`Work Time: ${Math.floor(workSeconds/60)} min
+Short Break: ${Math.floor(shortSeconds/60)} min
+Long Break: ${Math.floor(longSeconds/60)} min
+Shorts before Long: ${maxShortsBeforeLong}`;
+};
+
+// ---------- Button bindings ----------
+$('start-btn').onclick = startCountdown;
+$('pause-btn').onclick = pauseResume;
+$('reset-btn').onclick = resetTimer;
+
+// ---------- Initial UI ----------
+updateModeLabel();
+updateCounter();
+refreshGrowthFlower(0);
+resetFlower();
+applyAllThumbs();
+</script>
+
+</body>
+</html>
