@@ -203,7 +203,7 @@ hr{
 
 .timer {
   background: url("/elements/bg2.png");
-  background-size: 100% 55%; /* Resizes the image to cover the entire container */
+  background-size: 100% 60%; /* Resizes the image to cover the entire container */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   background-position: top; /* Centers the image within the container */
   position: relative;
