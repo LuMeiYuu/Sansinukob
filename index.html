@@ -39,7 +39,18 @@
   color: #2b2b2b;
   padding: 8px 10px 10px;
 }
-  
+    
+      .timer {
+      background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+        url("/elements/bg2.png");
+      background-size:cover;
+      background-position: top center;
+      padding: 2rem 4vw 4rem;
+      min-height: 100vh;
+      box-shadow: var(--shadow-1);
+    }
+
 
     .controls{
       display:flex;
@@ -64,13 +75,13 @@
     }
 
     .grid{
-      display: flex;
+      display:grid;
       grid-template-columns: repeat(4, minmax(140px,1fr));
       gap:8px;
       max-width: min(960px, 96vw);
       height: 40px;
       margin: 0 auto;
-    }
+    }x
 
     .grid input{
       width:100%;
@@ -125,7 +136,7 @@
     progress { width: 320px; height: 30px; }
    
     .pomobuttons{
-      height: 120px;
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -156,8 +167,8 @@
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
   .option {
-    position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; border: solid; border-width: 3px; border-color: #441209;
-    background: #d2b17c; box-shadow: 0 6px 18px rgba(2,6,23,.08); 
+    position: relative; border-radius: 14px; overflow: hidden; cursor: pointer;
+    background: #fff; box-shadow: 0 6px 18px rgba(2,6,23,.08);
     transition: transform .12s ease, box-shadow .12s ease;
     display: block;
   }
@@ -170,13 +181,11 @@
   .option:hover .thumb img { transform: scale(1.04); }
 
   .caption {
-  position: absolute;
-  left: 10px; bottom: 10px; right: 10px;
-  font: 500 12px/1.1;
-  font-family: "PanasChill";
+position: absolute;
+  left: 10px; bottom: 60px;
+  font: 600 13px/1.1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: #fff; background: rgba(0,0,0,.45);
-  padding: 10px 10px; border-radius: 10px; backdrop-filter: blur(5px);
-  text-align:center;
+  padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(4px);
   }
   .check {
     position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
@@ -350,18 +359,18 @@
   
 <div class="controls">
   <button class="pomobuttons" id="start-btn">
-    <img src="/elements/button.png" style="width: 140px; height: 72px;">
-    <span class="btn-text" style="font-size: 30px; margin-top: 5px;">START</span>
+    <img src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text">Start</span>
   </button>
 
   <button class="pomobuttons" id="pause-btn" disabled>
-    <img id="pause-icon" src="/elements/button.png" style="width: 140px; height: 72px;">
-    <span class="btn-text" id="pause-label" style="font-size: 30px; margin-top: 5px;">PAUSE</span>
+    <img id="pause-icon" src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text" id="pause-label">Pause</span>
   </button>
 
   <button class="pomobuttons" id="reset-btn">
-    <img src="/elements/button.png" style="width: 140px; height: 72px;">
-    <span class="btn-text" style="font-size: 30px; margin-top: 5px;">RESET</span>
+    <img src="/elements/button.png" style="width: 100%; height: 100%;">
+    <span class="btn-text">Reset</span>
   </button>
 </div>
 
@@ -383,11 +392,11 @@
 
 
     <div class="controls">
-      <input style="margin-top: 10px; height: 15px;font-family:'PanasChill' ;color: var(--accent);font-size: 20px;align-items: center;
+      <input style="margin-top: 50px; height: 15px;font-family:'PanasChill' ;color: var(--accent);font-size: 15px;align-items: center;
       white-space: pre-wrap;
-      min-height: 50px; min-width: 200px;"  type="button"   id="set-btn" value="Apply Settings">
+      min-height: 30px;"  type="button"   id="set-btn" value="Apply Settings">
     </div>
-   <div class="settings" id="timeSet">Please enter your desired settings above.</div>
+      <div class="settings" id="timeSet">Please enter your desired settings above.</div>
 
     <div class="flowerDisplay">
       <img id="growthFlower" alt="Flower growth" />
@@ -446,6 +455,7 @@
       <div class="desc"></div>
     </label>
   </div>
+
 </body>
 
 
@@ -688,7 +698,7 @@ function startCountdown(){
 
   isPaused = false;
   document.getElementById('pause-btn').disabled = false;           // <— enable
-  document.getElementById('pause-label').textContent = 'PAUSE';    // <— update label
+  document.getElementById('pause-label').textContent = 'Pause';    // <— update label
   clearTick();
   updateCounter();
   refreshGrowthFlower(computeIntervalPercent());
@@ -697,14 +707,14 @@ function startCountdown(){
 
 function pauseResume(){
   isPaused = !isPaused;
-  document.getElementById('pause-label').textContent = isPaused ? 'RESUME' : 'PAUSE';
+  document.getElementById('pause-label').textContent = isPaused ? 'Resume' : 'Pause';
   if (!isPaused && timer == null){ timer = setInterval(tick, 1000); }
 }
 
 function resetTimer(){
   clearTick();
   isPaused = true;
-  document.getElementById('pause-label').textContent = 'PAUSE';
+  document.getElementById('pause-label').textContent = 'Pause';
   setMode('work', true);
   shortBreaksTaken = 0;
 }
@@ -760,8 +770,6 @@ updateCounter();
 refreshGrowthFlower(0);
 resetFlower();
 applyAllThumbs();
-
-
 </script>
 
 </body>
