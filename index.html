@@ -7,207 +7,67 @@
   <link rel="icon" type="image/x-icon" href="icons/pegaraw.jpg">
   <title>Sansinukob</title>
 <style>
-
-  :root{
-      /* Palette */
-      --ink-1:#0b1220;
-      --ink-2:#ffd789;
-      --ink-3:#121a2a;
-      --ink-4:#3f0f08;
-
-      --sun-1:#ecac22;
-      --sun-2:#f0bc40;
-      --sun-3:#fae792;
-
-      --accent:#e27a3e;
-      --text-on-dark:#e6edf3;
-      --text-on-sun:#0a0a23;
-
-      /* Radii & spacing */
-      --r-1:8px;
-      --r-2:4px;
-      --gap-1:.5rem;
-      --gap-2:1rem;
-      --gap-3:2rem;
-
-      /* Shadows */
-      --shadow-1:0 2px 4px rgba(0,0,0,.2);
-    }
-
-    .desc{
-  font: 500 12px/1.35 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: #2b2b2b;
-  padding: 8px 10px 10px;
+  @font-face { font-family: "Garet"; src: url(fonts/Garet.otf); }
+@font-face { font-family: "Golden Age"; src: url(fonts/Golden\ Age\ Shad.ttf); }
+@font-face { font-family: "Golden Age Mini"; src: url("fonts/Golden Age.ttf"); }
+@font-face { font-family: "PanasChill"; src: url("fonts/PanasChill.ttf"); }
+:root{ --ink-1:#0b1220; --ink-2:#ffd789; --ink-3:#121a2a; --ink-4:#3f0f08; --sun-1:#ecac22; --sun-2:#f0bc40; --sun-3:#fae792; --accent:#e27a3e; --text-on-dark:#e6edf3; --text-on-sun:#0a0a23; --r-1:8px; --r-2:4px; --gap-1:.5rem; --gap-2:1rem; --gap-3:2rem; --shadow-1:0 2px 4px rgba(0,0,0,.2); }
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{ font-family:"Stardew Valley", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:0; min-height:100vh; }
+.titlescreen{ position:relative; width:100%; min-height:100vh; padding:2rem 1rem; background-image:url("bg.png"); background-size:cover; background-repeat:no-repeat; background-position:center; margin:0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; z-index:1; }
+.titlescreen img{ display:block; margin:0 auto; width:min(700px,70%); height:auto; }
+.gif{ position:relative; width:100vw; height:0; pointer-events:none; z-index:-1; }
+.gif img{ position:absolute; right:3%; width:110%; height:1000px; pointer-events:none; top:-40vh; z-index:-1; opacity:.35; }
+.image-overlay-wrapper{ position:relative; width:100%; height:0; z-index:1; }
+.top-image1{ position:absolute; left:94vw; transform:translateX(-50%); bottom:-40vh; width:120px; pointer-events:none; z-index:30; min-height:60vh; min-width:10vw; }
+.top-image2{ position:absolute; right:85vw; bottom:-10vh; width:200px; pointer-events:none; z-index:30; }
+.container{ width:100%; display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; }
+.btn{ display:flex; justify-content:center; align-items:center; margin:.5rem; min-width:140px; min-height:40px; font-size:1rem; padding:.5rem 1rem; color:#0a0a23; border-radius:8px; text-decoration:none; }
+.about{ background-color:#fae792; background-image:linear-gradient(to bottom, #ecac22 0%, #f0bc40 40%, #fae792 100%); background-repeat:no-repeat; background-size:100% 120px; background-position:top; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; padding:2rem 1rem; width:100%; z-index:10; }
+p{ font-family:"Garet"; font-size:clamp(1rem, 2.4vw, 1.25rem); color:#0a0a23; text-align:justify; margin:1rem auto; max-width:min(860px, 90vw); }
+#about-header1{ max-width:90vw; margin:1rem auto; }
+#about-header2{ max-width:90vw; margin:1rem auto; text-align:center; }
+#about-header2 img{ display:inline-block; max-width:100%; height:auto; vertical-align:middle; }
+hr{ border:none; border-top:1px solid #ecac22; margin:2rem 0; }
+.timer{ background:url("/elements/bg2.png"); background-size:100% 100%; background-repeat:no-repeat; background-position:top; position:relative; overflow:hidden; padding:2rem 1rem; }
+.counter-disp{ display:flex; flex-direction:column; align-items:center; justify-content:flex-start; background-image:url(icons/timerbg.png); background-repeat:no-repeat; background-position:top center; min-height:380px; }
+#counter{ font-family:"PanasChill"; font-size:clamp(42px, 12vw, 100px); line-height:1; padding-top:min(18vh, 110px); color:#9f512c; margin:0; text-align:center; }
+#modeLabel{ font-family:"Golden Age Mini"; font-size:clamp(16px, 3.5vw, 24px); color:#e27a3e; margin:0; text-align:center; }
+.controls{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:1vh auto; }
+button{ background:none; border:none; padding:0; cursor:pointer; transition:opacity .2s ease; }
+button:hover img{ opacity:.8; }
+button:active img{ opacity:.5; }
+.pomobuttons{ height:120px; display:flex; align-items:center; justify-content:center; gap:5px; position:relative; }
+.pomobuttons:disabled{ opacity:.5; cursor:not-allowed; }
+.btn-text{ position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-family:"PanasChill"; font-size:clamp(18px, 6vw, 28px); color:#e27a3e; pointer-events:none; }
+.grid{ display:grid; grid-template-columns:repeat(4, minmax(140px, 1fr)); gap:8px; max-width:min(960px, 96vw); margin:0 auto; }
+.grid input{ width:100%; padding:.6rem .8rem; border-radius:var(--r-2); border:1px solid var(--ink-4); background:var(--ink-2); outline:none; font-family:"PanasChill"; font-size:clamp(14px, 3.5vw, 20px); color:var(--accent); }
+.settings{ white-space:pre-line; background:var(--ink-2); padding:.8rem 1rem; border-radius:var(--r-2); border:1px solid var(--ink-4); max-width:min(500px, 96vw); margin:.5rem auto 0; color:#e27a3e; opacity:.9; font-family:"PanasChill"; }
+.placeholder{ color:var(--accent); font-family:"PanasChill"; font-size:20px; align-items:center; white-space:pre-wrap; min-height:50px; }
+.placeholder::placeholder{ color:var(--accent); font-family:"PanasChill"; font-size:.9rem; margin:auto; margin-top:1px; }
+.flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
+#growthFlower{ height:20vh; margin-left:auto; margin-right:auto; max-width:90vw; object-fit:contain; }
+progress{ width:min(90vw, 420px); height:30px; }
+#flowerEta{ font-family:"Golden Age Mini", "Golden Age", ui-serif, Georgia, serif; font-size:clamp(14px, 3.2vw, 22px); color:var(--accent); letter-spacing:.06em; opacity:.95; margin:1rem; text-align:center; }
+.flower-grid{ display:grid; gap:14px; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); max-width:min(960px, 96vw); margin:1rem auto 2rem; }
+.option{ position:relative; border-radius:10px; overflow:hidden; cursor:pointer; border:3px solid #441209; background:#ffd789; box-shadow:0 6px 18px rgba(2,6,23,.08); transition:transform .12s ease, box-shadow .12s ease; display:block; }
+.option:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(2,6,23,.12); }
+.option input{ position:absolute; inset:0; opacity:0; pointer-events:none; }
+.thumb{ position:relative; aspect-ratio:1/1; overflow:hidden; }
+.thumb img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .2s ease; }
+.option:hover .thumb img{ transform:scale(1.04); }
+.caption{ display:none; position:absolute; left:10px; bottom:10px; right:10px; font:500 12px/1.1; font-family:"PanasChill"; color:#fff; background:rgba(0,0,0,.45); padding:10px; border-radius:10px; backdrop-filter:blur(5px); text-align:center; }
+.check{ position:absolute; top:10px; right:10px; width:26px; height:26px; border-radius:999px; background:#fff; color:var(--accent); display:grid; place-items:center; font-weight:800; box-shadow:0 6px 18px rgba(2,6,23,.18); opacity:0; transform:scale(.8); transition:.15s ease; }
+.option input:checked + .thumb{ outline:3px solid var(--accent); outline-offset:-3px; }
+.option input:focus-visible + .thumb{ outline:3px solid var(--accent); outline-offset:-3px; }
+.option input:checked ~ .check{ opacity:1; transform:scale(1); }
+.desc{ font:500 12px/1.35 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:#44140c; padding:8px 10px 10px; }
+@media (max-width: 1024px){ .grid{ grid-template-columns:repeat(2, minmax(140px, 1fr)); } .gif img{ height:60vh; top:-20vh; } }
+@media (max-width: 768px){ .titlescreen, .about{ min-height:40vh; padding:1rem .75rem; } .btn{ min-width:120px; min-height:36px; font-size:.95rem; padding:.5rem; } .gif img{ display:none; } .top-image1,.top-image2{ display:none; } .grid{ grid-template-columns:1fr 1fr; }
 }
-  
-
-    .controls{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      justify-content:center;
-      margin: 1vh;
-    }
-
-    button{
-      background: none;       /* remove background */
-      border: none;           /* remove border */
-      padding: 0;             /* remove extra spacing */
-      cursor: pointer;
-      transition: opacity 0.2s ease;
-    }
-    button:hover img {
-      opacity: 0.8;  /* slightly dim on hover */
-    }
-    button:active img {
-      opacity: 0.5;  /* translucent when clicked */
-    }
-
-    .grid{
-      display: flex;
-      grid-template-columns: repeat(4, minmax(140px,1fr));
-      gap:8px;
-      max-width: min(960px, 96vw);
-      height: 40px;
-      margin: 0 auto;
-    }
-
-    .grid input{
-      width:100%;
-      padding:.6rem .8rem;
-      border-radius: var(--r-2);
-      border:1px solid var(--ink-4);
-      background: var(--ink-2);
-      outline:none;
-      
-    }
-
-    .settings{
-      white-space:pre-line;
-      background: var(--ink-2);
-      padding:.8rem 1rem;
-      border-radius: var(--r-2);
-      border:1px solid var(--ink-4);
-      max-width: min(500px, 96vw);
-      max-width: min(500px, 96vw);
-      margin: .5rem auto 0;
-      color: #e27a3e;
-      color: #e27a3e;
-      opacity:.9;
-      font-family: "PanasChill";
-      font-family: "PanasChill";
-    }
-    .growth-wrap{
-      margin-top:1rem; display:grid; place-items:center; gap:.35rem;
-   }
-
-    .placeholder{
-      color: var(--accent);
-      font-family: "PanasChill";
-      font-size: 20px;
-      align-items: center;
-      white-space: pre-wrap;
-      min-height: 80px;
-    }
-
-      .placeholder::placeholder{
-        color: var(--accent);
-        font-family: "PanasChill";
-        font-size: .9rem;
-        margin: 1rem;
-        white-space: pre-wrap;
-        margin: auto;
-        margin-top: 1px;
-    }
-
-    .flowerDisplay{ display:grid; place-items:center; gap:.5rem; margin-top:.25rem; }
-    #growthFlower { height: 20vh; margin-left: auto; margin-right: auto;}
-    progress { width: 320px; height: 30px; }
-   
-    .pomobuttons{
-      height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      position: relative;
-    }
-
-    .pomobuttons:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    
-    .btn-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-family: "PanasChill";
-      font-size: 25px;
-      color: #e27a3e;
-      pointer-events: none;
-}
-
-
-     .flower-grid {
-    display: grid; gap: 14px;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-  .option {
-    position: relative; border-radius: 10px; overflow: hidden; cursor: pointer; border: solid; border-width: 3px; border-color: #441209;
-    background: #ffd789; box-shadow: 0 6px 18px rgba(2,6,23,.08); 
-    transition: transform .12s ease, box-shadow .12s ease;
-    display: block;
-  }
-  .option:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(2,6,23,.12); }
-  .option input {
-    position: absolute; inset: 0; opacity: 0; pointer-events: none;
-  }
-  .thumb { position: relative;aspect-ratio: 1 / 1; overflow: hidden; }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .2s ease; }
-  .option:hover .thumb img { transform: scale(1.04); }
-
-  .caption {
-  display: none;
-  position: absolute;
-  left: 10px; bottom: 10px; right: 10px;
-  font: 500 12px/1.1;
-  font-family: "PanasChill";
-  color: #fff; background: rgba(0,0,0,.45);
-  padding: 10px 10px; border-radius: 10px; backdrop-filter: blur(5px);
-  text-align:center;
-  }
-  .check {
-    position: absolute; top: 10px; right: 10px; width: 26px; height: 26px;
-    border-radius: 999px; background: #fff; color: var(--accent);
-    display: grid; place-items: center; font-weight: 800;
-    box-shadow: 0 6px 18px rgba(2,6,23,.18); opacity: 0; transform: scale(.8);
-    transition: .15s ease;
-  }
-
-  /* Selected state */
-  .option input:checked + .thumb { outline: 3px solid var(--accent); outline-offset: -3px; }
-  .option input:focus-visible + .thumb { outline: 3px solid var(--accent); outline-offset: -3px; }
-  .option input:checked ~ .check { opacity: 1; transform: scale(1); }
-
-    #flowerEta {
-        font-family: "Golden Age Mini", "Golden Age", ui-serif, Georgia, serif;
-      font-size: clamp(14px, 3.2vw, 22px);
-      color: var(--accent);
-      letter-spacing:.06em;
-      opacity:.95;
-      margin: 2rem;
-    }
-
-.desc{
-  font: 500 12px/1.35 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  color: #2b2b2b;
-  padding: 8px 10px 10px;
-}
-    
-  
+@media (max-width: 520px){ .grid{ grid-template-columns:1fr; } .pomobuttons{ height:auto; } .btn-text{ font-size:clamp(16px, 6vw, 22px); } .container{ gap:.25rem; } .counter-disp{ min-height:300px; } }
+</style>
 </style>
 <script>
     const flowerData = [
