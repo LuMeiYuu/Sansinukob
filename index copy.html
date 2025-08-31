@@ -41,9 +41,7 @@
 }
     
       .timer {
-      background:
-        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
-        url("/elements/bg2.png");
+      background: transparent;
       background-size:cover;
       background-position: top center;
       padding: 2rem 4vw 4rem;
@@ -214,32 +212,38 @@ position: absolute;
   color: #2b2b2b;
   padding: 8px 10px 10px;
 }
- 
-.existing-section {
-  position: relative;       /* allows children to use absolute positioning */
-  padding: 20px;
-  background-color: #fafafa;
-  height: 300px;
-  border: 1px solid #ccc;
+
+.box-1 {
+  background: transparent;
+  border: none;
+  border-radius: none;
+  padding: 1rem;
 }
 
-.side-div-container {
-  position: absolute;       /* allows overlapping */
-  top: 50px;                /* distance from top of section */
-  right: 20px;              /* distance from right */
-  display: flex;
-  flex-direction: column;   /* stack vertically */
-  gap: 10px;
-  z-index: 10;              /* ensures it overlaps other elements */
+.box-2 {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.side-div {
-  width: 150px;
-  height: 50px;
-  background-color: lightblue;
+.bg2 {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 2rem;           /* space between boxes */
+  justify-content: center; /* center horizontally */
+  align-items: flex-start; /* align top edges */
+  flex-wrap: wrap;      /* allow wrapping on small screens */
+  padding: 2rem;
+  background: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+        url("/elements/bg2.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.box-1, .box-2 {
+  flex: 1 1 45%; /* grow, shrink, and take ~45% of the row */
+  min-width: 300px; /* ensures it doesn’t shrink too small */
 }
 
 
@@ -374,15 +378,16 @@ position: absolute;
 
 </div>
 
+
+<div class="container">
+<div class="bg2">
+  <div class="box-1">
+
+
+
   <a id="timer"></a>
 <div class="timer">
   
-  <div class="side-div-container">
-    <div class="side-div">Div 1</div>
-    <div class="side-div">Div 3</div>
-  </div>
-</div>
-
  
     <div class="counter-disp">
     <h1 id="counter" >25:00</h1>
@@ -432,12 +437,19 @@ position: absolute;
     </div>
       <!-- <div class="settings" id="timeSet">Please enter your desired settings above.</div> -->
 
+
+  </div>
+</div>
+  <div class="box-2">
     <div class="flowerDisplay">
       <img id="growthFlower" alt="Flower growth" />
       <progress id="progressbar" max="100" value="0"></progress>
       <div id="flowerEta">--</div>
     </div>
+  </div>
 
+
+<!-- FLOWER SELECTION -->
      <div class="flower-grid">
     <label class="option">
       <input type="radio" id="santan" name="flower" value="santan" />
